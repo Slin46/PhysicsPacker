@@ -8,7 +8,8 @@ public class ItemGenerator : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+        Vector3 spawnPosition = new Vector3(8f, 2f, 7f);
+        Instantiate(itemPrefab[randomList], itemPrefab[randomList].GetComponent, Quaternion.identity);
     }
 
     // Update is called once per frame
@@ -16,9 +17,9 @@ public class ItemGenerator : MonoBehaviour
     {
         
     }
-    void Spawn()
+    void RandomSpawnList()
     {
        randomList = Random.Range(0, itemPrefab.Count); 
-       Instantiate(itemPrefab[randomList], itemPrefab[randomList].GetComponent, Quaternion.identity);
+       
     }
 }
