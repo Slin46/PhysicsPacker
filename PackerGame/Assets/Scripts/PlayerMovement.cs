@@ -3,13 +3,13 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     //movement, sprinting, jumping force
-    public float moveForce = 30f;
-    public float sprintMultiplier = 1.5f;
+    public float moveForce = 60f;
+    public float maxSpeed = 5f;
     public float jumpForce = 7f;
 
     //groundcheck
     public Transform groundCheck;
-    public float groundDistance = 0.3f;
+    public float groundRadius = 0.3f;
     public LayerMask groundMask;
 
     //grabpoint assigned
@@ -24,8 +24,15 @@ public class PlayerMovement : MonoBehaviour
     private Rigidbody grabbedObject;
     private ConfigurableJoint grabJoint;
 
+    public GameObject com;
+    public Transform cam;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
+    {
+        
+    }
+    void Awake()
     {
         rb = GetComponent<Rigidbody>();
     }
@@ -33,50 +40,62 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        HandleJump();
-        HandleGrab();
-        HandleDrop();
-    }
+        // Ground check (visualize this!)
+        isGrounded = Physics.CheckSphere(
+            groundCheck.position,
+            groundRadius,
+            groundMask
+        );
 
-    private void FixedUpdate()
-    {
-        HandleMovement();
-    }
-
-    void HandleMovement()
-    {
-
-        float x = Input.GetAxis("Horizontal"); // A/D
-        float z = Input.GetAxis("Vertical");   // W/S
-
-        // Move relative to player orientation
-        Vector3 moveDir = (transform.forward * z + transform.right * x).normalized;
-
-        float currentForce = moveForce;
-        if (Input.GetKey(KeyCode.LeftShift))
-            currentForce *= sprintMultiplier;
-
-        rb.AddForce(moveDir * currentForce, ForceMode.Force);
-
-        // Clamp horizontal velocity
-        Vector3 horizontalVel = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
-        if (horizontalVel.magnitude > 5f) // max speed
-        {
-            Vector3 limitedVel = horizontalVel.normalized * 5f;
-            rb.linearVelocity = new Vector3(limitedVel.x, rb.linearVelocity.y, limitedVel.z);
-        }
-    }
-    void HandleJump()
-    {
-        //check if the player is grounded
-        isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
-
-        //space bar to jump if player is grounded
         if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
         {
             rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
         }
+
+        HandleGrab();
+        HandleDrop();
+
+
     }
+
+    void FixedUpdate()
+    {
+        float x = Input.GetAxis("Horizontal");
+        float z = Input.GetAxis("Vertical");
+
+        Vector3 camForward = cam.forward;
+        camForward.y = 0f;
+        camForward.Normalize();
+
+        Vector3 camRight = cam.right;
+        camRight.y = 0f;
+        camRight.Normalize();
+
+        Vector3 moveDir = (camForward * z + camRight * x).normalized;
+
+        // Apply force (use Acceleration for ragdoll)
+        rb.AddForce(moveDir * moveForce, ForceMode.Acceleration);
+
+        // Clamp horizontal speed
+        Vector3 flatVel = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
+        if (flatVel.magnitude > maxSpeed)
+        {
+            Vector3 limited = flatVel.normalized * maxSpeed;
+            rb.linearVelocity = new Vector3(limited.x, rb.linearVelocity.y, limited.z);
+        }
+
+        // Rotate COM to face movement direction
+        if (moveDir.magnitude > 0.1f)
+        {
+            com.transform.rotation = Quaternion.Slerp(
+                com.transform.rotation,
+                Quaternion.LookRotation(moveDir),
+                Time.fixedDeltaTime * 10f
+            );
+        }
+    }
+
+
     void HandleGrab()
     {
         //left click object with grab it
