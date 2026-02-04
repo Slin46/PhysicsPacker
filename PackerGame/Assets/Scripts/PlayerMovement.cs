@@ -57,14 +57,14 @@ public class PlayerMovement : MonoBehaviour
 
     void Jump()
     {
-        // Reset vertical velocity before applying jump force
-        Vector3 velocity = rb.linearVelocity;
-        velocity.y = 0f;
-        rb.linearVelocity = velocity;
-
+        Debug.Log(rb.angularVelocity.y);
+        
+        rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
         // Apply upward force
         rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
     }
+
+    
 
     void FixedUpdate()
     {
