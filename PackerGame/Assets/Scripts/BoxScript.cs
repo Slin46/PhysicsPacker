@@ -8,18 +8,18 @@ public class BoxScript : MonoBehaviour
     public bool playerInside = false;
         private ItemInventory playerInventory; //ref
     // Update is called once per frame
-    void Update()
-    {
-        if (!playerInside || isPacked) return;
+   // void Update()
+    //{
+       // if (!playerInside || isPacked) return;
         // when pressed P key, call PlantSeed function
-        if (Keyboard.current.pKey.wasPressedThisFrame)
-        {
-            if (playerInventory.PlaceItem()) //from seed inventory script
-            {
-                PackBox();
-            }
-        }
-    }  
+       // if (Keyboard.current.pKey.wasPressedThisFrame)
+      //  {
+            //if (playerInventory.PlaceItem()) //from seed inventory script
+           // {
+              //  PackBox();
+          //  }
+       // }
+   // }  
     void PackBox()
     {
         isPacked = true;
