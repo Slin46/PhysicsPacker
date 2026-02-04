@@ -8,7 +8,7 @@ public class ItemGenerator : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        Vector3 spawnPosition = new Vector3(0f, 0f, 0f);
+        Vector3 spawnPosition = new Vector3(-0.5f, 4f, 0f);
         Instantiate(itemPrefab[randomList], spawnPosition, Quaternion.identity);
     }
 
