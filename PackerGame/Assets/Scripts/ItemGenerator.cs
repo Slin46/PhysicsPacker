@@ -9,7 +9,7 @@ public class ItemGenerator : MonoBehaviour
     void Start()
     {
         Vector3 spawnPosition = new Vector3(8f, 2f, 7f);
-        Instantiate(itemPrefab[randomList], itemPrefab[randomList].GetComponent, Quaternion.identity);
+        Instantiate(itemPrefab[randomList], spawnPosition, Quaternion.identity);
     }
 
     // Update is called once per frame
