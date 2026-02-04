@@ -5,7 +5,7 @@ public class PlayerMovement : MonoBehaviour
     //movement, sprinting, jumping force
     public float moveForce = 60f;
     public float maxSpeed = 5f;
-    public float jumpForce = 7f;
+    public float jumpForce = 100f;
 
     //groundcheck
     public Transform groundCheck;
@@ -40,22 +40,30 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // Ground check (visualize this!)
-        isGrounded = Physics.CheckSphere(
-            groundCheck.position,
-            groundRadius,
-            groundMask
-        );
+        // Check if player is on the ground
+        isGrounded = Physics.CheckSphere(groundCheck.position, groundRadius, groundMask);
 
+        // Jump when space is pressed and player is grounded
         if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
         {
-            rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+            Jump();
         }
 
         HandleGrab();
         HandleDrop();
 
 
+    }
+
+    void Jump()
+    {
+        // Reset vertical velocity before applying jump force
+        Vector3 velocity = rb.linearVelocity;
+        velocity.y = 0f;
+        rb.linearVelocity = velocity;
+
+        // Apply upward force
+        rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
     }
 
     void FixedUpdate()
@@ -98,7 +106,7 @@ public class PlayerMovement : MonoBehaviour
 
     void HandleGrab()
     {
-        //left click object with grab it
+        //left click object will grab items
         if (Input.GetMouseButtonDown(0) && grabbedObject == null)
         {
             //detects the cursor and checks if the object is within range
