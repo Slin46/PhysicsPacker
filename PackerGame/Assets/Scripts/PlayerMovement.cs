@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    //movement, sprinting, jumping force
+    //movement, jumping force
     public float moveForce = 60f;
     public float maxSpeed = 5f;
     public float jumpForce = 100f;
@@ -12,17 +12,10 @@ public class PlayerMovement : MonoBehaviour
     public float groundRadius = 0.3f;
     public LayerMask groundMask;
 
-    //grabpoint assigned
-    public Transform grabPoint;
-    public float grabRange = 2f;
-
     //assign 3d rigidbody
     private Rigidbody rb;
     //check if the player is grounded
     private bool isGrounded;
-
-    private Rigidbody grabbedObject;
-    private ConfigurableJoint grabJoint;
 
     public GameObject com;
     public Transform cam;
@@ -48,10 +41,6 @@ public class PlayerMovement : MonoBehaviour
         {
             Jump();
         }
-
-        HandleGrab();
-        HandleDrop();
-
 
     }
 
@@ -101,60 +90,7 @@ public class PlayerMovement : MonoBehaviour
                 Time.fixedDeltaTime * 10f
             );
         }
+
     }
 
-
-    void HandleGrab()
-    {
-        //left click object will grab items
-        if (Input.GetMouseButtonDown(0) && grabbedObject == null)
-        {
-            //detects the cursor and checks if the object is within range
-            RaycastHit hit;
-            if (Physics.Raycast(transform.position, transform.forward, out hit, grabRange))
-            {
-                //if the object has the tag grabbable it will move to the grab point
-                if (hit.collider.CompareTag("Grabbable"))
-                {
-                    grabbedObject = hit.collider.GetComponent<Rigidbody>();
-                    GrabObject(grabbedObject);
-                }
-            }
-        }
-    }
-    void GrabObject(Rigidbody obj)
-    {
-        // Only create joint on the grabPoint (arm)
-        grabJoint = grabPoint.gameObject.AddComponent<ConfigurableJoint>();
-        grabJoint.connectedBody = obj;
-
-        // Lock position so it stays attached
-        grabJoint.xMotion = ConfigurableJointMotion.Locked;
-        grabJoint.yMotion = ConfigurableJointMotion.Locked;
-        grabJoint.zMotion = ConfigurableJointMotion.Locked;
-
-        // Allow rotation for floppy physics
-        grabJoint.angularXMotion = ConfigurableJointMotion.Free;
-        grabJoint.angularYMotion = ConfigurableJointMotion.Free;
-        grabJoint.angularZMotion = ConfigurableJointMotion.Free;
-
-        // Anchor at hand
-        grabJoint.anchor = Vector3.zero;
-        grabJoint.autoConfigureConnectedAnchor = false;
-        grabJoint.connectedAnchor = Vector3.zero;
-
-        // Makes object feel heavy
-        obj.linearDamping = 10f;
-    }
-    void HandleDrop()
-    {
-        //if the player has an object and presses F they can drop the item
-        if (Input.GetKeyDown(KeyCode.F) && grabbedObject != null)
-        {
-            //destroy grab point so item can be dropped
-            Destroy(grabJoint);
-            grabbedObject.linearDamping = 0f;
-            grabbedObject = null;
-        }
-    }
 }
