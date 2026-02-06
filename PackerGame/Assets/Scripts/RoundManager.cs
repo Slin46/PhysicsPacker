@@ -1,16 +1,89 @@
+using System.Collections;
+using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class RoundManager : MonoBehaviour
 {
+    //game is 2 min long
+    public float roundTime = 120f;
+    private float timer;
+    private bool roundActive = true;
+
+    //timer and times up text
+    public TextMeshProUGUI timerText;
+    public TextMeshProUGUI timesUpText;
+
+    //end scene with win and lose string
+    public string winOrLose;
+    public string resultSceneName = "ResultScene";
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+        timer = roundTime;
+        UpdateTimerUI();
+
+        if (timesUpText != null)
+            timesUpText.gameObject.SetActive(false);
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        if (roundActive)
+        {
+            //if timer is less than or equal to 0 it displays 0
+            timer -= Time.deltaTime;
+            if (timer <= 0)
+            {
+                timer = 0;
+                EndRound("Time's up!");
+            }
+            UpdateTimerUI();
+        }
     }
+    public void EndRound(string reason)
+    {
+        if (!roundActive) return;
+        roundActive = false;
+
+        // Show TIME'S UP
+        if (timesUpText != null)
+        {
+            timesUpText.text = reason;
+            timesUpText.gameObject.SetActive(true);
+        }
+
+        // Freeze everything
+        Time.timeScale = 0f;
+
+        // Start delayed scene load
+        StartCoroutine(LoadResultScene());
+    }
+    IEnumerator LoadResultScene()
+    {
+        // Wait 3 real seconds (ignores timeScale)
+        yield return new WaitForSecondsRealtime(1f);
+
+        // Unfreeze
+        Time.timeScale = 1f;
+
+        // Pass win/lose result
+        PlayerPrefs.SetString("RESULT", winOrLose);
+
+        SceneManager.LoadScene(resultSceneName);
+    }
+
+    private void UpdateTimerUI()
+    {
+        if (timerText != null)
+        {
+            //timer counting down
+            int minutes = Mathf.FloorToInt(timer / 60f);
+            int seconds = Mathf.FloorToInt(timer % 60f);
+            timerText.text = string.Format("Time Left: {0:00}:{1:00}", minutes, seconds);
+        }
+    }
+
 }

@@ -83,13 +83,7 @@ public class PlayerMovement : MonoBehaviour
 
         // Rotate COM to face movement direction
         if (moveDir.magnitude > 0.1f)
-        {
-            com.transform.rotation = Quaternion.Slerp(
-                com.transform.rotation,
-                Quaternion.LookRotation(moveDir),
-                Time.fixedDeltaTime * 10f
-            );
-        }
+        { com.transform.rotation = Quaternion.Slerp(com.transform.rotation, Quaternion.LookRotation(moveDir), Time.fixedDeltaTime * 10f); }
 
     }
 
