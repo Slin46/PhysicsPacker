@@ -19,7 +19,6 @@ public class RoundManager : MonoBehaviour
     //end scene with win and lose string
     public string winOrLose;
     public string resultSceneName = "ResultScene";
-    public string currentItemOrder;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -100,20 +99,20 @@ public class RoundManager : MonoBehaviour
 
     Debug.Log("NEW ORDER: " + currentOrder);
     }
-    public void OnItemPacked(string itemName)
+    public void OnItemPacked(ItemType packedItem)
     {
-    Debug.Log("Packed item: " + itemName);
+    Debug.Log("Packed item: " + packedItem);
 
-    // Compare packed item with required order
-    if (itemName == currentOrder)
+    // Compare ItemType to ItemType ✅
+    if (packedItem == currentOrder)
     {
         Debug.Log("Correct item packed!");
-        GenerateNewOrder();   // go to next order
+        GenerateNewOrder();
     }
     else
     {
         Debug.Log("Wrong item packed!");
-        // Optional: penalty, sound, etc.
     }
     }
+
 }

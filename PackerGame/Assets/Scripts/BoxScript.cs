@@ -22,34 +22,36 @@ public class BoxScript : MonoBehaviour
         PackItem(other.gameObject);
     }
 
-    void PackItem(GameObject item)
+    void PackItem(GameObject itemObj)
+{
+    isPacked = true;
+
+    // Stop physics
+    Rigidbody rb = itemObj.GetComponent<Rigidbody>();
+    if (rb != null)
     {
-        isPacked = true;
-
-        // --- Stop physics ---
-        Rigidbody rb = item.GetComponent<Rigidbody>();
-        if (rb != null)
-        {
-            rb.linearVelocity = Vector3.zero;
-            rb.isKinematic = true;
-        }
-
-        // --- Detach from player hand (destroy FixedJoint if exists) ---
-        FixedJoint joint = item.GetComponent<FixedJoint>();
-        if (joint != null)
-            Destroy(joint);
-
-        // --- Snap to box interior ---
-        item.transform.position = boxInteriorPoint.position;
-        item.transform.rotation = boxInteriorPoint.rotation;
-
-        // --- Optional: parent to box so it stays ---
-        item.transform.SetParent(boxInteriorPoint);
-
-        Debug.Log("Item packed!");
-
-        // --- Notify round manager ---
-        if (roundManager != null)
-            roundManager.OnItemPacked(item.name);
+        rb.linearVelocity = Vector3.zero;
+        rb.isKinematic = true;
     }
+
+    // Detach from player
+    FixedJoint joint = itemObj.GetComponent<FixedJoint>();
+    if (joint != null)
+        Destroy(joint);
+
+    // Snap to box interior
+    itemObj.transform.position = boxInteriorPoint.position;
+    itemObj.transform.rotation = boxInteriorPoint.rotation;
+    itemObj.transform.SetParent(boxInteriorPoint);
+
+    Debug.Log("Item packed!");
+
+    // Notify RoundManager with ItemType
+    Item itemComponent = itemObj.GetComponent<Item>();
+    if (itemComponent != null && roundManager != null)
+    {
+        roundManager.OnItemPacked(itemComponent.itemType);
+    }
+}
+
 }

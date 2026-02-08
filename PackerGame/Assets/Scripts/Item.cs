@@ -8,7 +8,7 @@ public enum ItemType
     Paper,
 }
 
-public class Item : MonoBehaviour   // ← THIS is the important part
+public class Item : MonoBehaviour
 {
-    public ItemType type;
+    public ItemType itemType; 
 }
