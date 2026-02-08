@@ -12,6 +12,11 @@ public class MenuButtons : MonoBehaviour
     public void PLAY()
     {
         // Load the first scene
+        SceneManager.LoadScene("Instructions");
+    }
+    public void NEXT()
+    {
+        // Load the first scene
         SceneManager.LoadScene("Scene1");
     }
     public void EXIT()

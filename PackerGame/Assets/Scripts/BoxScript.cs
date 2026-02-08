@@ -10,7 +10,7 @@ public class BoxScript : MonoBehaviour
 
     private void Start()
     {
-        roundManager = FindObjectOfType<RoundManager>();
+        roundManager = FindFirstObjectByType<RoundManager>();
     }
 
     private void OnTriggerEnter(Collider other)

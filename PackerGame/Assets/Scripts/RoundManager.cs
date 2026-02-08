@@ -45,6 +45,7 @@ public class RoundManager : MonoBehaviour
             if (timer <= 0)
             {
                 timer = 0;
+                winOrLose = "LOSE";
                 EndRound("Time's up!");
             }
             UpdateTimerUI();
@@ -68,6 +69,15 @@ public class RoundManager : MonoBehaviour
         // Start delayed scene load
         StartCoroutine(LoadResultScene());
     }
+
+    public void WinRound()
+    {
+        if (!roundActive) return;
+
+        winOrLose = "WIN";
+        EndRound("YOU WIN!");
+    }
+
     IEnumerator LoadResultScene()
     {
         // Wait 3 real seconds (ignores timeScale)
@@ -99,6 +109,7 @@ public class RoundManager : MonoBehaviour
 
     Debug.Log("NEW ORDER: " + currentOrder);
     }
+
     public void OnItemPacked(ItemType packedItem)
     {
     Debug.Log("Packed item: " + packedItem);
