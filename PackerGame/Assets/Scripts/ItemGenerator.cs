@@ -3,23 +3,18 @@ using System.Collections.Generic;
 
 public class ItemGenerator : MonoBehaviour
 {
-    public List<GameObject> itemPrefab = new List<GameObject>();
-    public int randomList;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    public List<GameObject> itemPrefabs;
+    public Transform spawnPoint;
+
     void Start()
     {
-        Vector3 spawnPosition = new Vector3(4f, 4f, 0f);
-        Instantiate(itemPrefab[randomList], spawnPosition, Quaternion.identity);
+        SpawnRandomItem();
     }
 
-    // Update is called once per frame
-    void Update()
+    public void SpawnRandomItem()
     {
-        
-    }
-    void RandomSpawnList()
-    {
-       randomList = Random.Range(0, itemPrefab.Count); 
-       
+        int index = Random.Range(0, itemPrefabs.Count);
+        Instantiate(itemPrefabs[index], spawnPoint.position, Quaternion.identity);
     }
 }
+

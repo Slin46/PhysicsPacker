@@ -5,29 +5,37 @@ using UnityEngine.SceneManagement;
 
 public class RoundManager : MonoBehaviour
 {
+    public static RoundManager Instance;
+    public ItemType currentOrder;
+    public ItemType[] possibleOrders;
     //game is 2 min long
     public float roundTime = 120f;
     private float timer;
     private bool roundActive = true;
 
-    //timer and times up text
     public TextMeshProUGUI timerText;
     public TextMeshProUGUI timesUpText;
 
     //end scene with win and lose string
     public string winOrLose;
     public string resultSceneName = "ResultScene";
+    public string currentItemOrder;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         timer = roundTime;
         UpdateTimerUI();
+        GenerateNewOrder();
 
         if (timesUpText != null)
             timesUpText.gameObject.SetActive(false);
+ 
     }
-
+    void Awake()
+    {
+    Instance = this;
+    }
     // Update is called once per frame
     void Update()
     {
@@ -85,5 +93,27 @@ public class RoundManager : MonoBehaviour
             timerText.text = string.Format("Time Left: {0:00}:{1:00}", minutes, seconds);
         }
     }
+    public void GenerateNewOrder()
+    {
+    int index = Random.Range(0, possibleOrders.Length);
+    currentOrder = possibleOrders[index];
 
+    Debug.Log("NEW ORDER: " + currentOrder);
+    }
+    public void OnItemPacked(string itemName)
+    {
+    Debug.Log("Packed item: " + itemName);
+
+    // Compare packed item with required order
+    if (itemName == currentOrder)
+    {
+        Debug.Log("Correct item packed!");
+        GenerateNewOrder();   // go to next order
+    }
+    else
+    {
+        Debug.Log("Wrong item packed!");
+        // Optional: penalty, sound, etc.
+    }
+    }
 }

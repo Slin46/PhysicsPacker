@@ -1,34 +1,55 @@
-using System.Numerics;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class BoxScript : MonoBehaviour
 {
-    public bool isInside = false;
+    [Header("Box Settings")]
+    public Transform boxInteriorPoint;   // where item snaps inside
     public bool isPacked = false;
-    public Transform boxInteriorPoint; 
-    private ItemGenerator item;
-    // Update is called once per frame
-   void Update()
-    {
-        
-    }
-    void OnTriggerEnter(Collider item)
-    {
-        // Check if the colliding object has the specific tag
-        if (item.gameObject.CompareTag("Grabbable"))
-        {
 
-            // If it matches, execute specific actions here
-            PackBox();
-            Debug.Log("Pack!");
-            // You can access other components or properties of the detected object using 'other.gameObject'
-            // other.gameObject.GetComponent<SomeOtherScript>().DoSomething();
-        }
-    }
-    void PackBox()
+    private RoundManager roundManager;
+
+    private void Start()
     {
-        // notify quest manager
+        roundManager = FindObjectOfType<RoundManager>();
     }
-        // A method to place an item inside the box
+
+    private void OnTriggerEnter(Collider other)
+    {
+        // Only react to grabbable items
+        if (!other.CompareTag("Grabbable")) return;
+        if (isPacked) return;
+
+        PackItem(other.gameObject);
+    }
+
+    void PackItem(GameObject item)
+    {
+        isPacked = true;
+
+        // --- Stop physics ---
+        Rigidbody rb = item.GetComponent<Rigidbody>();
+        if (rb != null)
+        {
+            rb.linearVelocity = Vector3.zero;
+            rb.isKinematic = true;
+        }
+
+        // --- Detach from player hand (destroy FixedJoint if exists) ---
+        FixedJoint joint = item.GetComponent<FixedJoint>();
+        if (joint != null)
+            Destroy(joint);
+
+        // --- Snap to box interior ---
+        item.transform.position = boxInteriorPoint.position;
+        item.transform.rotation = boxInteriorPoint.rotation;
+
+        // --- Optional: parent to box so it stays ---
+        item.transform.SetParent(boxInteriorPoint);
+
+        Debug.Log("Item packed!");
+
+        // --- Notify round manager ---
+        if (roundManager != null)
+            roundManager.OnItemPacked(item.name);
+    }
 }
