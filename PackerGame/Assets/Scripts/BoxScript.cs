@@ -14,13 +14,13 @@ public class BoxScript : MonoBehaviour
         roundManager = FindFirstObjectByType<RoundManager>();
     }
 
-    private void OnTriggerEnter(Collider triggerPoint)
+    private void OnTriggerEnter(Collider other)
     {
         // Only react to grabbable items
-        if (!triggerPoint.CompareTag("Grabbable")) return;
+        if (!other.CompareTag("Grabbable")) return;
         if (isPacked) return;
 
-        PackItem(triggerPoint.gameObject);
+        PackItem(other.gameObject);
     }
 
     void PackItem(GameObject itemObj)
