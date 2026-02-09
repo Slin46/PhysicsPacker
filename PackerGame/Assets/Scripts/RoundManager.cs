@@ -15,7 +15,7 @@ public class RoundManager : MonoBehaviour
 
     public TextMeshProUGUI timerText;
     public TextMeshProUGUI timesUpText;
-    public TextMeshProUGUI orderText;
+    public TMP_Text orderText;
 
     //end scene with win and lose string
     public string winOrLose;
