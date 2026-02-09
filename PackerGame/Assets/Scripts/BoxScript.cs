@@ -12,7 +12,7 @@ public class BoxScript : MonoBehaviour
 
     private void Start()
     {
-        roundManager = FindFirstObjectByType<RoundManager>();
+        roundManager = RoundManager.Instance;
         boxRb = GetComponent<Rigidbody>();
     }
 
@@ -30,12 +30,6 @@ public class BoxScript : MonoBehaviour
     isPacked = true;
 
     // Stop physics
-    Rigidbody rb = itemObj.GetComponent<Rigidbody>();
-    if (rb != null)
-    {
-        rb.linearVelocity = Vector3.zero;
-        rb.isKinematic = true;
-    }
 
     // Detach from player
     FixedJoint joint = itemObj.GetComponent<FixedJoint>();
@@ -54,10 +48,6 @@ public class BoxScript : MonoBehaviour
     if (itemComponent != null && roundManager != null)
     {
         roundManager.OnItemPacked(itemComponent.itemType);
-    }
-    if (boxRb != null)
-    {
-    boxRb.linearVelocity = transform.forward * 2f; // speed = 2, adjust as needed
     }
 }
 }
