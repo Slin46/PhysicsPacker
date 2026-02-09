@@ -18,8 +18,8 @@ public class BoxScript : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        // Only react to grabbable items
-        if (!other.CompareTag("Grabbable")) return;
+        // Only react to collectible items
+        if (!other.CompareTag("Collectible")) return;
         if (isPacked) return;
 
         PackItem(other.gameObject);
