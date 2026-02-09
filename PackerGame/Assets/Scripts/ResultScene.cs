@@ -11,9 +11,9 @@ public class ResultScene : MonoBehaviour
         string result = PlayerPrefs.GetString("RESULT", "LOSE");
 
         if (result == "WIN")
-            resultText.text = "YOU WIN!";
+            resultText.text = "PAYDAY!";
         else
-            resultText.text = "YOU LOSE!";
+            resultText.text = "YOUR FIRED!";
     }
 
     // Update is called once per frame

@@ -7,7 +7,6 @@ public class PlayerMovement : MonoBehaviour
     public float maxSpeed = 5f;
     public float jumpForce = 100f;
 
-    public float rotationSpeed = 60f;
     //groundcheck
     public Transform groundCheck;
     public float groundRadius = 0.3f;
