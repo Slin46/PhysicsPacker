@@ -15,6 +15,7 @@ public class RoundManager : MonoBehaviour
 
     public TextMeshProUGUI timerText;
     public TextMeshProUGUI timesUpText;
+    public TextMeshProUGUI orderText;
 
     //end scene with win and lose string
     public string winOrLose;
@@ -103,13 +104,25 @@ public class RoundManager : MonoBehaviour
         }
     }
     public void GenerateNewOrder()
+{
+    if (possibleOrders.Length == 0)
     {
+        Debug.LogWarning("No possible orders assigned!");
+        return;
+    }
+
     int index = Random.Range(0, possibleOrders.Length);
     currentOrder = possibleOrders[index];
 
     Debug.Log("NEW ORDER: " + currentOrder);
-    }
 
+    // --- Update UI text ---
+    if (orderText != null)
+    {
+        orderText.text = "Order: " + currentOrder.ToString();
+        orderText.gameObject.SetActive(true);
+    }
+}
     public void OnItemPacked(ItemType packedItem)
     {
     Debug.Log("Packed item: " + packedItem);

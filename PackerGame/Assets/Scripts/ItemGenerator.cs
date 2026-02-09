@@ -10,32 +10,31 @@ public class ItemSpawnData
 
 public class ItemGenerator : MonoBehaviour
 {
-    [Header("Item Spawn List")]
+    [Header("Items to spawn at round start")]
     public List<ItemSpawnData> items = new List<ItemSpawnData>();
 
     private void Start()
     {
-        SpawnRandomItem();
+        SpawnAllItems();
     }
 
-    public void SpawnRandomItem()
+    public void SpawnAllItems()
     {
         if (items.Count == 0)
         {
-            Debug.LogWarning("No items assigned in ItemGenerator!");
+            Debug.LogWarning("ItemGenerator: No items assigned.");
             return;
         }
 
-        int index = Random.Range(0, items.Count);
-
-        ItemSpawnData data = items[index];
-
-        if (data.itemPrefab == null || data.spawnPoint == null)
+        foreach (ItemSpawnData data in items)
         {
-            Debug.LogWarning("Item prefab or spawn point missing!");
-            return;
-        }
+            if (data.itemPrefab == null || data.spawnPoint == null)
+            {
+                Debug.LogWarning("ItemGenerator: Missing prefab or spawn point.");
+                continue;
+            }
 
-        Instantiate(data.itemPrefab, data.spawnPoint.position, data.spawnPoint.rotation);
+            Instantiate(data.itemPrefab, data.spawnPoint.position, data.spawnPoint.rotation);
+        }
     }
 }
