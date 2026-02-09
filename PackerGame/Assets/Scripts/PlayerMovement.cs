@@ -7,6 +7,7 @@ public class PlayerMovement : MonoBehaviour
     public float maxSpeed = 5f;
     public float jumpForce = 100f;
 
+    public float rotationSpeed = 60f;
     //groundcheck
     public Transform groundCheck;
     public float groundRadius = 0.3f;
@@ -81,9 +82,13 @@ public class PlayerMovement : MonoBehaviour
             rb.linearVelocity = new Vector3(limited.x, rb.linearVelocity.y, limited.z);
         }
 
-        // Rotate COM to face movement direction
-        if (moveDir.magnitude > 0.1f)
-        { com.transform.rotation = Quaternion.Slerp(com.transform.rotation, Quaternion.LookRotation(moveDir), Time.fixedDeltaTime * 10f); }
+        //rotate towards move direction
+        if(moveDir!= Vector3.zero)
+        {
+            Quaternion targetRotation = Quaternion.LookRotation(moveDir);
+
+            rb.MoveRotation(Quaternion.RotateTowards(transform.rotation, targetRotation, rotationSpeed * Time.fixedDeltaTime));
+        }
 
     }
 
