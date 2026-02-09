@@ -4,6 +4,7 @@ public class BoxScript : MonoBehaviour
 {
     [Header("Box Settings")]
     public Transform boxInteriorPoint;   // where item snaps inside
+    public GameObject triggerPoint;
     public bool isPacked = false;
 
     private RoundManager roundManager;
@@ -13,13 +14,13 @@ public class BoxScript : MonoBehaviour
         roundManager = FindFirstObjectByType<RoundManager>();
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter(Collider triggerPoint)
     {
         // Only react to grabbable items
-        if (!other.CompareTag("Grabbable")) return;
+        if (!triggerPoint.CompareTag("Grabbable")) return;
         if (isPacked) return;
 
-        PackItem(other.gameObject);
+        PackItem(triggerPoint.gameObject);
     }
 
     void PackItem(GameObject itemObj)
@@ -53,5 +54,4 @@ public class BoxScript : MonoBehaviour
         roundManager.OnItemPacked(itemComponent.itemType);
     }
 }
-
 }
