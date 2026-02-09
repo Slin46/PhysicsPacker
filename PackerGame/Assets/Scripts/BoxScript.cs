@@ -3,6 +3,7 @@ using UnityEngine;
 public class BoxScript : MonoBehaviour
 {
     [Header("Box Settings")]
+    private Rigidbody boxRb;
     public Transform boxInteriorPoint;   // where item snaps inside
     public GameObject triggerPoint;
     public bool isPacked = false;
@@ -12,6 +13,7 @@ public class BoxScript : MonoBehaviour
     private void Start()
     {
         roundManager = FindFirstObjectByType<RoundManager>();
+        boxRb = GetComponent<Rigidbody>();
     }
 
     private void OnTriggerEnter(Collider other)
@@ -52,6 +54,10 @@ public class BoxScript : MonoBehaviour
     if (itemComponent != null && roundManager != null)
     {
         roundManager.OnItemPacked(itemComponent.itemType);
+    }
+    if (boxRb != null)
+    {
+    boxRb.linearVelocity = transform.forward * 2f; // speed = 2, adjust as needed
     }
 }
 }
