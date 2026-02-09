@@ -63,6 +63,8 @@ public class RoundManager : MonoBehaviour
             timesUpText.text = reason;
             timesUpText.gameObject.SetActive(true);
         }
+        if (orderText != null)
+        orderText.gameObject.SetActive(false);
 
         // Freeze everything
         Time.timeScale = 0f;
