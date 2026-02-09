@@ -1,20 +1,41 @@
 using UnityEngine;
 using System.Collections.Generic;
 
+[System.Serializable]
+public class ItemSpawnData
+{
+    public GameObject itemPrefab;
+    public Transform spawnPoint;
+}
+
 public class ItemGenerator : MonoBehaviour
 {
-    public List<GameObject> itemPrefabs;
-    public Transform spawnPoint;
+    [Header("Item Spawn List")]
+    public List<ItemSpawnData> items = new List<ItemSpawnData>();
 
-    void Start()
+    private void Start()
     {
         SpawnRandomItem();
     }
 
     public void SpawnRandomItem()
     {
-        int index = Random.Range(0, itemPrefabs.Count);
-        Instantiate(itemPrefabs[index], spawnPoint.position, Quaternion.identity);
+        if (items.Count == 0)
+        {
+            Debug.LogWarning("No items assigned in ItemGenerator!");
+            return;
+        }
+
+        int index = Random.Range(0, items.Count);
+
+        ItemSpawnData data = items[index];
+
+        if (data.itemPrefab == null || data.spawnPoint == null)
+        {
+            Debug.LogWarning("Item prefab or spawn point missing!");
+            return;
+        }
+
+        Instantiate(data.itemPrefab, data.spawnPoint.position, data.spawnPoint.rotation);
     }
 }
-
