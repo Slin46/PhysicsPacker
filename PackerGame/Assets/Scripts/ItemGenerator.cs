@@ -37,4 +37,6 @@ public class ItemGenerator : MonoBehaviour
             Instantiate(data.itemPrefab, data.spawnPoint.position, data.spawnPoint.rotation);
         }
     }
+    public void SpawnBox()
+    {}
 }
