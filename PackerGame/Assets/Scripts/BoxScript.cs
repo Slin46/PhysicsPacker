@@ -37,7 +37,6 @@ public class BoxScript : MonoBehaviour
     }
 
     void PackItem(GameObject itemObj)
-<<<<<<< HEAD
     {
         isPacked = true;
 
@@ -72,27 +71,4 @@ public class BoxScript : MonoBehaviour
         }
     }
 
-=======
-{
-    isPacked = true;
-    // Detach from player
-    FixedJoint joint = itemObj.GetComponent<FixedJoint>();
-    if (joint != null)
-        Destroy(joint);
-
-    // Snap to box interior
-    itemObj.transform.position = boxInteriorPoint.position;
-    itemObj.transform.rotation = boxInteriorPoint.rotation;
-    itemObj.transform.SetParent(boxInteriorPoint);
-
-    Debug.Log("Item packed!");
-
-    // Notify RoundManager with ItemType
-    Item itemComponent = itemObj.GetComponent<Item>();
-    if (itemComponent != null && roundManager != null)
-    {
-        roundManager.OnItemPacked(itemComponent.itemType);
-    }
-}
->>>>>>> 6c23ad6af99e5c2c81fbf6bca808efdc01b8108f
 }
