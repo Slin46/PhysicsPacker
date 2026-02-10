@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 public class RoundManager : MonoBehaviour
 {
     public static RoundManager Instance;
+    private ItemGenerator itemGenerator;
     public ItemType currentOrder;
     public ItemType[] possibleOrders;
     //game is 2 min long
@@ -27,6 +28,7 @@ public class RoundManager : MonoBehaviour
         timer = roundTime;
         UpdateTimerUI();
         GenerateNewOrder();
+        itemGenerator = FindFirstObjectByType<ItemGenerator>();
 
         if (timesUpText != null)
             timesUpText.gameObject.SetActive(false);
