@@ -14,7 +14,7 @@ public class BoxScript : MonoBehaviour
 
     private void Start()
     {
-        roundManager = RoundManager.Instance;
+        roundManager = FindFirstObjectByType<RoundManager>();
         boxRb = GetComponent<Rigidbody>();
     }
     void FixedUpdate()
