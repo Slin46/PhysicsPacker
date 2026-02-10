@@ -28,9 +28,6 @@ public class BoxScript : MonoBehaviour
     void PackItem(GameObject itemObj)
 {
     isPacked = true;
-
-    // Stop physics
-
     // Detach from player
     FixedJoint joint = itemObj.GetComponent<FixedJoint>();
     if (joint != null)
