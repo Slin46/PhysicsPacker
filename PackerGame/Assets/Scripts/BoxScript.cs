@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class BoxScript : MonoBehaviour
@@ -7,6 +8,7 @@ public class BoxScript : MonoBehaviour
     public Transform boxInteriorPoint;   // where item snaps inside
     public GameObject triggerPoint;
     public bool isPacked = false;
+    public float maxSpeed = 3f;
 
     private RoundManager roundManager;
 
@@ -15,7 +17,15 @@ public class BoxScript : MonoBehaviour
         roundManager = FindFirstObjectByType<RoundManager>();
         boxRb = GetComponent<Rigidbody>();
     }
+    void FixedUpdate()
+    {
+        if (boxRb == null) return;
 
+        if (boxRb.linearVelocity.magnitude > maxSpeed)
+        {
+            boxRb.linearVelocity = boxRb.linearVelocity.normalized * maxSpeed;
+        }
+    }
     private void OnTriggerEnter(Collider other)
     {
         // Only react to collectible items
@@ -23,41 +33,42 @@ public class BoxScript : MonoBehaviour
         if (isPacked) return;
 
         PackItem(other.gameObject);
+
     }
 
     void PackItem(GameObject itemObj)
-{
-    isPacked = true;
-
-    // Stop physics
-    Rigidbody rb = itemObj.GetComponent<Rigidbody>();
-    if (rb != null)
     {
-        rb.linearVelocity = Vector3.zero;
-        rb.isKinematic = true;
+        isPacked = true;
+
+        StartCoroutine(PackNextPhysicsFrame(itemObj));
     }
 
-    // Detach from player
-    FixedJoint joint = itemObj.GetComponent<FixedJoint>();
-    if (joint != null)
-        Destroy(joint);
-
-    // Snap to box interior
-    itemObj.transform.position = boxInteriorPoint.position;
-    itemObj.transform.rotation = boxInteriorPoint.rotation;
-    itemObj.transform.SetParent(boxInteriorPoint);
-
-    Debug.Log("Item packed!");
-
-    // Notify RoundManager with ItemType
-    Item itemComponent = itemObj.GetComponent<Item>();
-    if (itemComponent != null && roundManager != null)
+    IEnumerator PackNextPhysicsFrame(GameObject itemObj)
     {
-        roundManager.OnItemPacked(itemComponent.itemType);
+        Rigidbody rb = itemObj.GetComponent<Rigidbody>();
+        Collider col = itemObj.GetComponent<Collider>();
+
+        if (rb != null)
+        {
+            rb.linearVelocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
+            rb.isKinematic = true;
+        }
+
+        if (col != null)
+            col.enabled = false;
+
+        yield return new WaitForFixedUpdate();
+
+        itemObj.transform.SetParent(transform);
+        itemObj.transform.position = boxInteriorPoint.position;
+        itemObj.transform.rotation = boxInteriorPoint.rotation;
+
+        Item itemComponent = itemObj.GetComponent<Item>();
+        if (itemComponent != null && roundManager != null)
+        {
+            roundManager.OnItemPacked(itemComponent.itemType);
+        }
     }
-    if (boxRb != null)
-    {
-    boxRb.linearVelocity = transform.forward * 2f; // speed = 2, adjust as needed
-    }
-}
+
 }
