@@ -129,13 +129,16 @@ public class RoundManager : MonoBehaviour
 }
     public void OnItemPacked(ItemType packedItem)
     {
-    Debug.Log("Packed item: " + packedItem);
+            Debug.Log("Packed item: " + packedItem);
 
-    // Compare ItemType to ItemType ✅
     if (packedItem == currentOrder)
     {
         Debug.Log("Correct item packed!");
+
         GenerateNewOrder();
+
+        if (itemGenerator != null)
+            itemGenerator.SpawnReplacementBox();   // ⭐ NEW
     }
     else
     {
