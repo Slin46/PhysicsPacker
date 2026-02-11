@@ -7,22 +7,21 @@ public class RoundManager : MonoBehaviour
 {
     public static RoundManager Instance;
 
-    [Header("Round Settings")]
-    public float roundTime = 120f;       // 2 minutes
+    [Header("Game Settings")]
+    public int boxesToWin = 5;              // Number of boxes to pack to win
+    public float roundTime = 120f;          // Round duration in seconds
+
     private float timer;
     private bool roundActive = true;
-
-    [Header("Boxes")]
-    public int boxesCompleted = 0;
-    public int boxesToWin = 5;
+    private int boxesCompleted = 0;
 
     [Header("UI")]
     public TextMeshProUGUI timerText;
     public TextMeshProUGUI timesUpText;
 
-    [Header("End Scene")]
+    [Header("Result")]
+    public string winOrLose;
     public string resultSceneName = "ResultScene";
-    private string winOrLose;
 
     private void Awake()
     {
@@ -43,12 +42,10 @@ public class RoundManager : MonoBehaviour
         if (!roundActive) return;
 
         timer -= Time.deltaTime;
-
         if (timer <= 0f)
         {
             timer = 0f;
-            EndRound("Time's up!");
-            winOrLose = "LOSE";
+            EndRound("Time's up!", "LOSE");
         }
 
         UpdateTimerUI();
@@ -60,25 +57,25 @@ public class RoundManager : MonoBehaviour
         {
             int minutes = Mathf.FloorToInt(timer / 60f);
             int seconds = Mathf.FloorToInt(timer % 60f);
-            timerText.text = $"Time Left: {minutes:00}:{seconds:00}";
+            timerText.text = string.Format("Time Left: {0:00}:{1:00}", minutes, seconds);
         }
     }
 
     /// <summary>
-    /// Called by BoxScript when a box is successfully packed.
+    /// Called by BoxScript when a box is successfully packed
     /// </summary>
-    /// <param name="box">The completed box</param>
     public void OnBoxCompleted(BoxScript box)
     {
-        boxesCompleted++;
-        Debug.Log($"Box completed! Total: {boxesCompleted}");
+        if (!roundActive) return;
 
-        // Optional: spawn a new replacement box
-        if (boxesCompleted < boxesToWin)
+        boxesCompleted++;
+        Debug.Log($"Box completed! Total: {boxesCompleted}/{boxesToWin}");
+
+        // Spawn replacement box if needed
+        ItemGenerator generator = FindFirstObjectByType<ItemGenerator>();
+        if (generator != null)
         {
-            ItemGenerator generator = FindFirstObjectByType<ItemGenerator>();
-            if (generator != null)
-                generator.SpawnReplacementBox();
+            generator.SpawnReplacementBox();
         }
 
         if (boxesCompleted >= boxesToWin)
@@ -88,33 +85,29 @@ public class RoundManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Ends the round as a win
+    /// Called when player completes all boxes
     /// </summary>
     public void WinRound()
     {
-        if (!roundActive) return;
-
-        winOrLose = "WIN";
-        EndRound("Good Job!");
+        EndRound("You win!", "WIN");
     }
 
     /// <summary>
-    /// Ends the round and shows times up or win message
+    /// Ends the round and shows result
     /// </summary>
-    /// <param name="reason">Message to display</param>
-    private void EndRound(string reason)
+    private void EndRound(string message, string result)
     {
-        if (!roundActive) return;
-
         roundActive = false;
+        winOrLose = result;
 
         if (timesUpText != null)
         {
-            timesUpText.text = reason;
+            timesUpText.text = message;
             timesUpText.gameObject.SetActive(true);
         }
 
-        Time.timeScale = 0f; // freeze game
+        // Freeze game
+        Time.timeScale = 0f;
 
         StartCoroutine(LoadResultScene());
     }
@@ -123,8 +116,9 @@ public class RoundManager : MonoBehaviour
     {
         yield return new WaitForSecondsRealtime(1f);
 
-        Time.timeScale = 1f; // unfreeze for scene load
+        Time.timeScale = 1f;
         PlayerPrefs.SetString("RESULT", winOrLose);
+
         SceneManager.LoadScene(resultSceneName);
     }
 }

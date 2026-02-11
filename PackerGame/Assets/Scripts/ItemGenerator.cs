@@ -27,52 +27,65 @@ public class ItemGenerator : MonoBehaviour
         SpawnInitialBoxes();
     }
 
-    // Spawn all collectible items
+    /// <summary>
+    /// Spawn all collectible items at their spawn points
+    /// </summary>
     public void SpawnAllItems()
     {
-        if (items.Count == 0)
-        {
-            Debug.LogWarning("ItemGenerator: No items assigned.");
-            return;
-        }
+        if (items.Count == 0) return;
 
         foreach (ItemSpawnData data in items)
         {
-            if (data.itemPrefab == null || data.spawnPoint == null)
-            {
-                Debug.LogWarning("ItemGenerator: Missing prefab or spawn point.");
-                continue;
-            }
-
-            Instantiate(data.itemPrefab, data.spawnPoint.position, data.spawnPoint.rotation);
+            if (data.itemPrefab != null && data.spawnPoint != null)
+                Instantiate(data.itemPrefab, data.spawnPoint.position, data.spawnPoint.rotation);
         }
     }
 
-    // Spawn initial boxes with unique required items
+    /// <summary>
+    /// Spawn the first set of boxes with unique required items
+    /// </summary>
     void SpawnInitialBoxes()
     {
-        if (boxPrefab == null || boxSpawnPoints.Count == 0 || possibleItems.Length == 0)
-            return;
+        if (boxPrefab == null || boxSpawnPoints.Count == 0 || possibleItems.Length == 0) return;
 
-        // Shuffle possibleItems to assign unique items
-        ItemType[] itemsToAssign = (ItemType[])possibleItems.Clone();
-        ShuffleArray(itemsToAssign);
+        // Shuffle possible items so each box gets a different one
+        ItemType[] shuffledItems = (ItemType[])possibleItems.Clone();
+        ShuffleArray(shuffledItems);
 
         for (int i = 0; i < startBoxCount; i++)
         {
-            Transform point = boxSpawnPoints[i % boxSpawnPoints.Count];
-            GameObject boxObj = Instantiate(boxPrefab, point.position, point.rotation);
-            BoxScript box = boxObj.GetComponent<BoxScript>();
+            Transform spawnPoint = boxSpawnPoints[i % boxSpawnPoints.Count];
+            GameObject boxObj = Instantiate(boxPrefab, spawnPoint.position, spawnPoint.rotation);
 
+            BoxScript box = boxObj.GetComponent<BoxScript>();
             if (box != null)
             {
-                // assign a unique item
-                box.SetRequiredItem(itemsToAssign[i % itemsToAssign.Length]);
+                // Assign unique required item
+                box.SetRequiredItem(shuffledItems[i % shuffledItems.Length]);
             }
         }
     }
 
-    // Simple Fisher-Yates shuffle
+    /// <summary>
+    /// Spawn a replacement box after one is packed
+    /// </summary>
+    public void SpawnReplacementBox()
+    {
+        if (boxPrefab == null || boxSpawnPoints.Count == 0 || possibleItems.Length == 0) return;
+
+        Transform point = boxSpawnPoints[Random.Range(0, boxSpawnPoints.Count)];
+        GameObject boxObj = Instantiate(boxPrefab, point.position, point.rotation);
+
+        BoxScript box = boxObj.GetComponent<BoxScript>();
+        if (box != null)
+        {
+            box.SetRequiredItem(possibleItems[Random.Range(0, possibleItems.Length)]);
+        }
+    }
+
+    /// <summary>
+    /// Shuffle array helper
+    /// </summary>
     void ShuffleArray(ItemType[] array)
     {
         for (int i = array.Length - 1; i > 0; i--)
@@ -81,43 +94,6 @@ public class ItemGenerator : MonoBehaviour
             ItemType temp = array[i];
             array[i] = array[j];
             array[j] = temp;
-        }
-    }
-
-    // Spawn ONE replacement box after a box is packed
-    public void SpawnReplacementBox()
-    {
-        if (boxPrefab == null || boxSpawnPoints.Count == 0) return;
-
-        Transform point = boxSpawnPoints[Random.Range(0, boxSpawnPoints.Count)];
-        List<ItemType> itemsCopy = new List<ItemType>(possibleItems);
-        SpawnBoxAt(point, itemsCopy);
-    }
-
-    // Core box spawn logic
-    void SpawnBoxAt(Transform point, List<ItemType> availableItems)
-    {
-        GameObject boxObj = Instantiate(boxPrefab, point.position, point.rotation);
-
-        BoxScript box = boxObj.GetComponent<BoxScript>();
-        if (box != null)
-        {
-            // Pick a random item from the available list
-            if (availableItems.Count == 0)
-            {
-                Debug.LogWarning("No more unique items left. Using random from possibleItems.");
-                box.SetRequiredItem(possibleItems[Random.Range(0, possibleItems.Length)]);
-            }
-            else
-            {
-                int index = Random.Range(0, availableItems.Count);
-                box.SetRequiredItem(availableItems[index]);
-                availableItems.RemoveAt(index); // ensures next box gets a different item
-            }
-        }
-        else
-        {
-            Debug.LogWarning("Spawned box is missing BoxScript.");
         }
     }
 }
