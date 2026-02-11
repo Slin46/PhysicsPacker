@@ -6,6 +6,7 @@ public class PlayerMovement : MonoBehaviour
     public float moveForce = 60f;
     public float maxSpeed = 5f;
     public float jumpForce = 100f;
+    public float rotationSpeed = 5f;
 
     //groundcheck
     public Transform groundCheck;
@@ -85,6 +86,7 @@ public class PlayerMovement : MonoBehaviour
         if(moveDir!= Vector3.zero)
         {
             Quaternion targetRotation = Quaternion.LookRotation(moveDir);
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
 
             rb.MoveRotation(targetRotation);
         }
