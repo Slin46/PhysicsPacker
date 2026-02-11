@@ -7,6 +7,7 @@ public class ItemSpawnData
     public GameObject itemPrefab;
     public Transform spawnPoint;
 }
+
 public class ItemGenerator : MonoBehaviour
 {
     [Header("Items to spawn at round start")]
@@ -16,16 +17,21 @@ public class ItemGenerator : MonoBehaviour
     public GameObject boxPrefab;
     public List<Transform> boxSpawnPoints = new List<Transform>();
     public int startBoxCount = 5;
+
+    [Header("Possible required items for boxes")]
     public ItemType[] possibleItems;
 
+    // ─────────────────────────────
+    // Start
+    // ─────────────────────────────
     private void Start()
     {
         SpawnAllItems();
-        SpawnStartingBoxes();
+        SpawnInitialBoxes();
     }
 
     // ─────────────────────────────
-    // Spawn all items once
+    // Spawn all collectible items once
     // ─────────────────────────────
     public void SpawnAllItems()
     {
@@ -48,35 +54,69 @@ public class ItemGenerator : MonoBehaviour
     }
 
     // ─────────────────────────────
-    // Spawn first 5 boxes
+    // Spawn the first set of boxes
     // ─────────────────────────────
-    void SpawnStartingBoxes()
+    void SpawnInitialBoxes()
     {
-        for (int i = 0; i < startBoxCount && i < boxSpawnPoints.Count; i++)
+        if (boxPrefab == null || boxSpawnPoints.Count == 0)
         {
-            SpawnBoxAt(boxSpawnPoints[i]);
+            Debug.LogWarning("ItemGenerator: Box prefab or spawn points missing.");
+            return;
+        }
+
+        for (int i = 0; i < startBoxCount; i++)
+        {
+            Transform point = boxSpawnPoints[i % boxSpawnPoints.Count];
+            SpawnBoxAt(point);
         }
     }
 
     // ─────────────────────────────
     // Spawn ONE replacement box
-    // Called when correct item packed
+    // Called by RoundManager when a box is completed
     // ─────────────────────────────
-public void SpawnReplacementBox()
-{
-    if (boxPrefab == null || boxSpawnPoints.Count == 0) return;
+    public void SpawnReplacementBox()
+    {
+        if (boxPrefab == null || boxSpawnPoints.Count == 0) return;
 
-    Transform point = boxSpawnPoints[Random.Range(0, boxSpawnPoints.Count)];
+        Transform point = boxSpawnPoints[Random.Range(0, boxSpawnPoints.Count)];
+        SpawnBoxAt(point);
+    }
 
-    GameObject boxObj = Instantiate(boxPrefab, point.position, point.rotation);
-
-    // ⭐ Assign random required item to this box
-    BoxScript box = boxObj.GetComponent<BoxScript>();
-    if (box != null)
-        box.requiredItem = possibleItems[Random.Range(0, possibleItems.Length)];
-}
+    // ─────────────────────────────
+    // Core box spawn logic
+    // ─────────────────────────────
     void SpawnBoxAt(Transform point)
     {
-        Instantiate(boxPrefab, point.position, point.rotation);
+        GameObject boxObj = Instantiate(boxPrefab, point.position, point.rotation);
+
+        BoxScript box = boxObj.GetComponent<BoxScript>();
+        if (box != null)
+        {
+            box.SetRequiredItem(GetRandomValidItem());
+        }
+        else
+        {
+            Debug.LogWarning("Spawned box is missing BoxScript.");
+        }
+    }
+
+    // ─────────────────────────────
+    // Get random item that is NOT None
+    // ─────────────────────────────
+    ItemType GetRandomValidItem()
+    {
+        if (possibleItems == null || possibleItems.Length == 0)
+            return ItemType.None;
+
+        ItemType item;
+
+        do
+        {
+            item = possibleItems[Random.Range(0, possibleItems.Length)];
+        }
+        while (item == ItemType.None);
+
+        return item;
     }
 }

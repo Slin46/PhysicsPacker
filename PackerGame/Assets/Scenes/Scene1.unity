@@ -437,7 +437,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RoundManager
   currentOrder: 0
-  possibleOrders: 010000000200000003000000
+  possibleOrders: 0100000002000000030000000400000005000000
+  boxesCompleted: 0
+  boxesToWin: 5
   roundTime: 120
   timerText: {fileID: 350467965}
   timesUpText: {fileID: 575870555}
@@ -667,6 +669,7 @@ MonoBehaviour:
   - {fileID: 595590935}
   - {fileID: 1331492513}
   startBoxCount: 5
+  possibleItems: 0100000002000000030000000400000005000000
 --- !u!4 &196569215
 Transform:
   m_ObjectHideFlags: 0
