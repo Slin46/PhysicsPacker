@@ -6,77 +6,90 @@ using UnityEngine.SceneManagement;
 public class RoundManager : MonoBehaviour
 {
     public static RoundManager Instance;
-    private ItemGenerator itemGenerator;
-    public ItemType currentOrder;
-    public ItemType[] possibleOrders;
-    public int boxesCompleted = 0;
-    public int boxesToWin = 5;
-    //game is 2 min long
-    public float roundTime = 120f;
+
+    [Header("Round Settings")]
+    public float roundTime = 120f;       // 2 minutes
     private float timer;
     private bool roundActive = true;
 
+    [Header("Boxes")]
+    public int boxesCompleted = 0;
+    public int boxesToWin = 5;
+
+    [Header("UI")]
     public TextMeshProUGUI timerText;
     public TextMeshProUGUI timesUpText;
-    public TMP_Text orderText;
 
-    //end scene with win and lose string
-    public string winOrLose;
+    [Header("End Scene")]
     public string resultSceneName = "ResultScene";
+    private string winOrLose;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    private void Awake()
+    {
+        Instance = this;
+    }
+
+    private void Start()
     {
         timer = roundTime;
         UpdateTimerUI();
-        GenerateNewOrder();
-        itemGenerator = FindFirstObjectByType<ItemGenerator>();
 
         if (timesUpText != null)
             timesUpText.gameObject.SetActive(false);
- 
     }
-    void Awake()
-    {
-    Instance = this;
-    }
-    // Update is called once per frame
-    void Update()
-    {
-        if (roundActive)
-        {
-            //if timer is less than or equal to 0 it displays 0
-            timer -= Time.deltaTime;
-            if (timer <= 0)
-            {
-                timer = 0;
-                winOrLose = "LOSE";
-                EndRound("Time's up!");
-            }
-            UpdateTimerUI();
-        }
-    }
-    public void EndRound(string reason)
+
+    private void Update()
     {
         if (!roundActive) return;
-        roundActive = false;
 
-        // Show TIME'S UP
-        if (timesUpText != null)
+        timer -= Time.deltaTime;
+
+        if (timer <= 0f)
         {
-            timesUpText.text = reason;
-            timesUpText.gameObject.SetActive(true);
+            timer = 0f;
+            EndRound("Time's up!");
+            winOrLose = "LOSE";
         }
-        if (orderText != null)
-        orderText.gameObject.SetActive(false);
 
-        // Freeze everything
-        Time.timeScale = 0f;
-
-        // Start delayed scene load
-        StartCoroutine(LoadResultScene());
+        UpdateTimerUI();
     }
 
+    private void UpdateTimerUI()
+    {
+        if (timerText != null)
+        {
+            int minutes = Mathf.FloorToInt(timer / 60f);
+            int seconds = Mathf.FloorToInt(timer % 60f);
+            timerText.text = $"Time Left: {minutes:00}:{seconds:00}";
+        }
+    }
+
+    /// <summary>
+    /// Called by BoxScript when a box is successfully packed.
+    /// </summary>
+    /// <param name="box">The completed box</param>
+    public void OnBoxCompleted(BoxScript box)
+    {
+        boxesCompleted++;
+        Debug.Log($"Box completed! Total: {boxesCompleted}");
+
+        // Optional: spawn a new replacement box
+        if (boxesCompleted < boxesToWin)
+        {
+            ItemGenerator generator = FindFirstObjectByType<ItemGenerator>();
+            if (generator != null)
+                generator.SpawnReplacementBox();
+        }
+
+        if (boxesCompleted >= boxesToWin)
+        {
+            WinRound();
+        }
+    }
+
+    /// <summary>
+    /// Ends the round as a win
+    /// </summary>
     public void WinRound()
     {
         if (!roundActive) return;
@@ -85,74 +98,33 @@ public class RoundManager : MonoBehaviour
         EndRound("Good Job!");
     }
 
-    IEnumerator LoadResultScene()
+    /// <summary>
+    /// Ends the round and shows times up or win message
+    /// </summary>
+    /// <param name="reason">Message to display</param>
+    private void EndRound(string reason)
     {
-        // Wait 3 real seconds (ignores timeScale)
+        if (!roundActive) return;
+
+        roundActive = false;
+
+        if (timesUpText != null)
+        {
+            timesUpText.text = reason;
+            timesUpText.gameObject.SetActive(true);
+        }
+
+        Time.timeScale = 0f; // freeze game
+
+        StartCoroutine(LoadResultScene());
+    }
+
+    private IEnumerator LoadResultScene()
+    {
         yield return new WaitForSecondsRealtime(1f);
 
-        // Unfreeze
-        Time.timeScale = 1f;
-
-        // Pass win/lose result
+        Time.timeScale = 1f; // unfreeze for scene load
         PlayerPrefs.SetString("RESULT", winOrLose);
-
         SceneManager.LoadScene(resultSceneName);
-    }
-
-    private void UpdateTimerUI()
-    {
-        if (timerText != null)
-        {
-            //timer counting down
-            int minutes = Mathf.FloorToInt(timer / 60f);
-            int seconds = Mathf.FloorToInt(timer % 60f);
-            timerText.text = string.Format("Time Left: {0:00}:{1:00}", minutes, seconds);
-        }
-    }
-    public void GenerateNewOrder()
-{
-    if (possibleOrders.Length == 0)
-    {
-        Debug.LogWarning("No possible orders assigned!");
-        return;
-    }
-
-    int index = Random.Range(0, possibleOrders.Length);
-    currentOrder = possibleOrders[index];
-
-    Debug.Log("NEW ORDER: " + currentOrder);
-
-    // --- Update UI text ---
-    if (orderText != null)
-    {
-        orderText.text = "Order: " + currentOrder.ToString();
-        orderText.gameObject.SetActive(true);
-    }
-}
-    public void OnItemPacked(ItemType packedItem)
-    {
-            Debug.Log("Packed item: " + packedItem);
-
-    if (packedItem == currentOrder)
-    {
-        Debug.Log("Correct item packed!");
-
-        GenerateNewOrder();
-
-        if (itemGenerator != null)
-            itemGenerator.SpawnReplacementBox();   // ⭐ NEW
-    }
-    else
-    {
-        Debug.Log("Wrong item packed!");
-    }
-    }
-    public void OnBoxCompleted(BoxScript box)
-    {
-    boxesCompleted++;
-    Debug.Log("Box completed! Total: " + boxesCompleted);
-
-    if (boxesCompleted >= boxesToWin)
-        WinRound();
     }
 }
