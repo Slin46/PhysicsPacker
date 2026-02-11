@@ -360,7 +360,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 3e849706b94d19849bc2f58d66d7a958, type: 2}
+  - {fileID: 2100000, guid: 8d58cdfe12a47114c853b7aa9fdd548a, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -436,11 +436,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6a746eb581494738991737a17156f4f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RoundManager
-  roundTime: 120
-  boxesCompleted: 0
   boxesToWin: 5
+  roundTime: 120
   timerText: {fileID: 350467965}
   timesUpText: {fileID: 575870555}
+  winOrLose: 
   resultSceneName: ResultScene
 --- !u!4 &69152015
 Transform:
@@ -5631,7 +5631,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 3e849706b94d19849bc2f58d66d7a958, type: 2}
+  - {fileID: 2100000, guid: 8d58cdfe12a47114c853b7aa9fdd548a, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
