@@ -68,7 +68,6 @@ public class ItemGenerator : MonoBehaviour
         remainingItems.RemoveAt(index); // remove to prevent duplicates
 
         box.SetRequiredItem(item);
-        box.SetGenerator(this); // allow box to request replacement box
     }
 
     // Spawn a replacement box after one is completed
@@ -84,6 +83,5 @@ public class ItemGenerator : MonoBehaviour
 
         // Replacement box can pick ANY item randomly
         box.SetRequiredItem(possibleItems[Random.Range(0, possibleItems.Length)]);
-        box.SetGenerator(this);
     }
 }
