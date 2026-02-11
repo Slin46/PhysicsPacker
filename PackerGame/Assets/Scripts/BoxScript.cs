@@ -19,6 +19,7 @@ public class BoxScript : MonoBehaviour
     public Vector3 textOffset = new Vector3(0, 2f, 0);
 
     private RoundManager roundManager;
+    private ItemGenerator generator;
     private void Start()
     {
         roundManager = FindFirstObjectByType<RoundManager>();
@@ -106,5 +107,9 @@ public class BoxScript : MonoBehaviour
     {
         requiredItem = item;
         UpdateFloatingText();
+    }
+    public void SetGenerator(ItemGenerator gen)
+    {
+    generator = gen;
     }
 }
