@@ -80,7 +80,7 @@ public class RoundManager : MonoBehaviour
         if (!roundActive) return;
 
         winOrLose = "WIN";
-        EndRound("YOU WIN!");
+        EndRound("Good Job!");
     }
 
     IEnumerator LoadResultScene()
