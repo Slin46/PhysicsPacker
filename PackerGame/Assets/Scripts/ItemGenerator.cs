@@ -16,6 +16,7 @@ public class ItemGenerator : MonoBehaviour
     public GameObject boxPrefab;
     public List<Transform> boxSpawnPoints = new List<Transform>();
     public int startBoxCount = 5;
+    public ItemType[] possibleItems;
 
     private void Start()
     {
@@ -61,19 +62,19 @@ public class ItemGenerator : MonoBehaviour
     // Spawn ONE replacement box
     // Called when correct item packed
     // ─────────────────────────────
-    public void SpawnReplacementBox()
+public void SpawnReplacementBox()
 {
-    if (boxSpawnPoints.Count == 0 || boxPrefab == null)
-    {
-        Debug.LogWarning("ItemGenerator: Missing box prefab or spawn points.");
-        return;
-    }
+    if (boxPrefab == null || boxSpawnPoints.Count == 0) return;
 
     Transform point = boxSpawnPoints[Random.Range(0, boxSpawnPoints.Count)];
-    SpawnBoxAt(point);
+
+    GameObject boxObj = Instantiate(boxPrefab, point.position, point.rotation);
+
+    // ⭐ Assign random required item to this box
+    BoxScript box = boxObj.GetComponent<BoxScript>();
+    if (box != null)
+        box.requiredItem = possibleItems[Random.Range(0, possibleItems.Length)];
 }
-
-
     void SpawnBoxAt(Transform point)
     {
         Instantiate(boxPrefab, point.position, point.rotation);

@@ -5,10 +5,13 @@ public class BoxScript : MonoBehaviour
 {
     [Header("Box Settings")]
     private Rigidbody boxRb;
-    public Transform boxInteriorPoint;   // where item snaps inside
-    public GameObject triggerPoint;
+
+    public Transform boxInteriorPoint;
     public bool isPacked = false;
     public float maxSpeed = 3f;
+
+    [Header("Order")]
+    public ItemType requiredItem;   // ⭐ each box has its own order
 
     private RoundManager roundManager;
 
@@ -17,29 +20,36 @@ public class BoxScript : MonoBehaviour
         roundManager = FindFirstObjectByType<RoundManager>();
         boxRb = GetComponent<Rigidbody>();
     }
+
     void FixedUpdate()
     {
         if (boxRb == null) return;
 
         if (boxRb.linearVelocity.magnitude > maxSpeed)
-        {
             boxRb.linearVelocity = boxRb.linearVelocity.normalized * maxSpeed;
-        }
     }
+
     private void OnTriggerEnter(Collider other)
     {
-        // Only react to collectible items
         if (!other.CompareTag("Collectible")) return;
         if (isPacked) return;
 
-        PackItem(other.gameObject);
+        Item item = other.GetComponent<Item>();
+        if (item == null) return;
 
+        // ⭐ Check if correct item
+        if (item.itemType != requiredItem)
+        {
+            Debug.Log("Wrong item for this box!");
+            return;
+        }
+
+        PackItem(other.gameObject);
     }
 
     void PackItem(GameObject itemObj)
     {
         isPacked = true;
-
         StartCoroutine(PackNextPhysicsFrame(itemObj));
     }
 
@@ -64,11 +74,8 @@ public class BoxScript : MonoBehaviour
         itemObj.transform.position = boxInteriorPoint.position;
         itemObj.transform.rotation = boxInteriorPoint.rotation;
 
-        Item itemComponent = itemObj.GetComponent<Item>();
-        if (itemComponent != null && roundManager != null)
-        {
-            roundManager.OnItemPacked(itemComponent.itemType);
-        }
+        // ⭐ notify round manager that THIS box was completed
+        if (roundManager != null)
+            roundManager.OnBoxCompleted(this);
     }
-
 }

@@ -9,6 +9,8 @@ public class RoundManager : MonoBehaviour
     private ItemGenerator itemGenerator;
     public ItemType currentOrder;
     public ItemType[] possibleOrders;
+    public int boxesCompleted = 0;
+    public int boxesToWin = 5;
     //game is 2 min long
     public float roundTime = 120f;
     private float timer;
@@ -145,5 +147,12 @@ public class RoundManager : MonoBehaviour
         Debug.Log("Wrong item packed!");
     }
     }
+    public void OnBoxCompleted(BoxScript box)
+    {
+    boxesCompleted++;
+    Debug.Log("Box completed! Total: " + boxesCompleted);
 
+    if (boxesCompleted >= boxesToWin)
+        WinRound();
+    }
 }
