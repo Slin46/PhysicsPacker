@@ -51,18 +51,36 @@ public class ItemGenerator : MonoBehaviour
     // Spawn initial boxes with unique required items
     void SpawnInitialBoxes()
     {
-        if (boxPrefab == null || boxSpawnPoints.Count == 0)
-        {
-            Debug.LogWarning("ItemGenerator: Box prefab or spawn points missing.");
+        if (boxPrefab == null || boxSpawnPoints.Count == 0 || possibleItems.Length == 0)
             return;
-        }
 
-        List<ItemType> itemsCopy = new List<ItemType>(possibleItems);
+        // Shuffle possibleItems to assign unique items
+        ItemType[] itemsToAssign = (ItemType[])possibleItems.Clone();
+        ShuffleArray(itemsToAssign);
 
         for (int i = 0; i < startBoxCount; i++)
         {
             Transform point = boxSpawnPoints[i % boxSpawnPoints.Count];
-            SpawnBoxAt(point, itemsCopy);
+            GameObject boxObj = Instantiate(boxPrefab, point.position, point.rotation);
+            BoxScript box = boxObj.GetComponent<BoxScript>();
+
+            if (box != null)
+            {
+                // assign a unique item
+                box.SetRequiredItem(itemsToAssign[i % itemsToAssign.Length]);
+            }
+        }
+    }
+
+    // Simple Fisher-Yates shuffle
+    void ShuffleArray(ItemType[] array)
+    {
+        for (int i = array.Length - 1; i > 0; i--)
+        {
+            int j = Random.Range(0, i + 1);
+            ItemType temp = array[i];
+            array[i] = array[j];
+            array[j] = temp;
         }
     }
 

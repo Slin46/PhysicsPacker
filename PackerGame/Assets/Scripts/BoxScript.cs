@@ -95,8 +95,10 @@ public class BoxScript : MonoBehaviour
 
     public void SetRequiredItem(ItemType item)
     {
-        requiredItem = item;
-        UpdateFloatingText();
+    requiredItem = item;
+
+    if (worldText != null)
+        worldText.text = requiredItem.ToString(); // update floating text immediately
     }
 
     private void UpdateFloatingText()
