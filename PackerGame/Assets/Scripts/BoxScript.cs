@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using TMPro;
 
 public class BoxScript : MonoBehaviour
 {
@@ -11,14 +12,19 @@ public class BoxScript : MonoBehaviour
     public float maxSpeed = 3f;
 
     [Header("Order")]
-    public ItemType requiredItem;   // ⭐ each box has its own order
+    public ItemType requiredItem;
+
+    [Header("Floating UI")]
+    public TextMeshPro worldText;   // ⭐ floating text above box
+    public Vector3 textOffset = new Vector3(0, 2f, 0);
 
     private RoundManager roundManager;
-
     private void Start()
     {
         roundManager = FindFirstObjectByType<RoundManager>();
         boxRb = GetComponent<Rigidbody>();
+
+        UpdateFloatingText();
     }
 
     void FixedUpdate()
@@ -29,6 +35,13 @@ public class BoxScript : MonoBehaviour
             boxRb.linearVelocity = boxRb.linearVelocity.normalized * maxSpeed;
     }
 
+    private void LateUpdate()
+    {
+        // keep text floating above box
+        if (worldText != null)
+            worldText.transform.position = transform.position + textOffset;
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (!other.CompareTag("Collectible")) return;
@@ -37,7 +50,6 @@ public class BoxScript : MonoBehaviour
         Item item = other.GetComponent<Item>();
         if (item == null) return;
 
-        // ⭐ Check if correct item
         if (item.itemType != requiredItem)
         {
             Debug.Log("Wrong item for this box!");
@@ -50,6 +62,11 @@ public class BoxScript : MonoBehaviour
     void PackItem(GameObject itemObj)
     {
         isPacked = true;
+
+        // hide floating text when completed
+        if (worldText != null)
+            worldText.gameObject.SetActive(false);
+
         StartCoroutine(PackNextPhysicsFrame(itemObj));
     }
 
@@ -74,8 +91,20 @@ public class BoxScript : MonoBehaviour
         itemObj.transform.position = boxInteriorPoint.position;
         itemObj.transform.rotation = boxInteriorPoint.rotation;
 
-        // ⭐ notify round manager that THIS box was completed
         if (roundManager != null)
             roundManager.OnBoxCompleted(this);
+    }
+
+    void UpdateFloatingText()
+    {
+        if (worldText != null)
+            worldText.text = requiredItem.ToString();
+    }
+
+    //called when generator assigns item
+    public void SetRequiredItem(ItemType item)
+    {
+        requiredItem = item;
+        UpdateFloatingText();
     }
 }

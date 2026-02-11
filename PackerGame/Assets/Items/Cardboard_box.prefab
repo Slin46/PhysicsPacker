@@ -59,14 +59,14 @@ RectTransform:
   m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: -0.234}
   m_LocalScale: {x: 0.021564089, y: 0.021564089, z: 0.021564089}
-  m_ConstrainProportionsScale: 0
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 5702161443172912353}
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0.029, y: 0.351}
-  m_SizeDelta: {x: 20, y: 5}
+  m_SizeDelta: {x: 30, y: 10}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!23 &3807277292565349880
 MeshRenderer:
@@ -258,8 +258,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BoxScript
   boxInteriorPoint: {fileID: 9032517999211076359}
-  triggerPoint: {fileID: 6379462570405610109}
   isPacked: 0
+  maxSpeed: 3
+  requiredItem: 0
+  worldText: {fileID: 8990110856778812875}
+  textOffset: {x: 0, y: 2, z: 0}
 --- !u!65 &914737910148630610
 BoxCollider:
   m_ObjectHideFlags: 0
