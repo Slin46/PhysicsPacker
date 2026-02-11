@@ -669,7 +669,7 @@ MonoBehaviour:
   - {fileID: 595590935}
   - {fileID: 1331492513}
   startBoxCount: 5
-  possibleItems: 0100000002000000030000000400000005000000
+  possibleItems: 0000000001000000020000000300000004000000
 --- !u!4 &196569215
 Transform:
   m_ObjectHideFlags: 0

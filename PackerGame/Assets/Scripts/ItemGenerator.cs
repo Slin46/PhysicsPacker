@@ -107,16 +107,11 @@ public class ItemGenerator : MonoBehaviour
     ItemType GetRandomValidItem()
     {
         if (possibleItems == null || possibleItems.Length == 0)
-            return ItemType.None;
-
-        ItemType item;
-
-        do
         {
-            item = possibleItems[Random.Range(0, possibleItems.Length)];
+            Debug.LogError("No possible items assigned in ItemGenerator!");
+            return default; // safe fallback
         }
-        while (item == ItemType.None);
 
-        return item;
+        return possibleItems[Random.Range(0, possibleItems.Length)];
     }
 }
