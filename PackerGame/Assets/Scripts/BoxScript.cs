@@ -28,7 +28,10 @@ public class BoxScript : MonoBehaviour
         // spawn the floating text above the box
         if (worldTextPrefab != null)
         {
-            worldTextInstance = Instantiate(worldTextPrefab, transform.position + textOffset, Quaternion.identity);
+            float yOffset = 0f;
+            Collider col = GetComponent<Collider>();
+            if (col != null) yOffset = col.bounds.size.y + 0.1f; // just above box
+            worldTextInstance = Instantiate(worldTextPrefab, transform.position + new Vector3(0, yOffset, 0), Quaternion.Euler(90f, 0f, 0f));
             worldTextInstance.text = requiredItem.ToString();
         }
     }
@@ -106,6 +109,7 @@ public class BoxScript : MonoBehaviour
     {
         requiredItem = item;
 
+        // Update floating text
         if (worldTextInstance != null)
             worldTextInstance.text = requiredItem.ToString();
     }
