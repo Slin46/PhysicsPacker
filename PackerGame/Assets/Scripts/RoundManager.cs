@@ -65,24 +65,19 @@ public class RoundManager : MonoBehaviour
     /// Called by BoxScript when a box is successfully packed
     /// </summary>
     public void OnBoxCompleted(BoxScript box)
+{
+    if (!roundActive) return;
+
+    boxesCompleted++;
+    Debug.Log($"Box completed! Total: {boxesCompleted}/{boxesToWin}");
+
+    // ❌ No more replacement spawning
+
+    if (boxesCompleted >= boxesToWin)
     {
-        if (!roundActive) return;
-
-        boxesCompleted++;
-        Debug.Log($"Box completed! Total: {boxesCompleted}/{boxesToWin}");
-
-        // Spawn replacement box if needed
-        ItemGenerator generator = FindFirstObjectByType<ItemGenerator>();
-        if (generator != null)
-        {
-            generator.SpawnReplacementBox();
-        }
-
-        if (boxesCompleted >= boxesToWin)
-        {
-            WinRound();
-        }
+        WinRound();
     }
+}
 
     /// <summary>
     /// Called when player completes all boxes

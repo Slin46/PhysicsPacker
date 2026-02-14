@@ -1,99 +1,53 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-[System.Serializable]
-public class ItemSpawnData
-{
-    public GameObject itemPrefab;
-    public Transform spawnPoint;
-}
-
 public class ItemGenerator : MonoBehaviour
 {
-    [Header("Items to spawn at round start")]
-    public List<ItemSpawnData> items = new List<ItemSpawnData>();
-
-    [Header("Box spawning")]
+    [Header("Box Spawning")]
     public GameObject boxPrefab;
-    public List<Transform> boxSpawnPoints = new List<Transform>();
-    public int startBoxCount = 5;
+    public Transform[] boxSpawnPoints;   // assign 5 in inspector
 
-    [Header("Possible required items for boxes")]
-    public ItemType[] possibleItems;
+    [Header("Items")]
+    public ItemType[] possibleItems;     // your item list
 
-    private void Start()
+    void Start()
     {
-        SpawnAllItems();
-        SpawnInitialBoxes();
+        SpawnStartingBoxes();
     }
 
-    /// <summary>
-    /// Spawn all collectible items at their spawn points
-    /// </summary>
-    public void SpawnAllItems()
+    void SpawnStartingBoxes()
     {
-        if (items.Count == 0) return;
-
-        foreach (ItemSpawnData data in items)
+        if (boxPrefab == null || boxSpawnPoints.Length == 0 || possibleItems.Length == 0)
         {
-            if (data.itemPrefab != null && data.spawnPoint != null)
-                Instantiate(data.itemPrefab, data.spawnPoint.position, data.spawnPoint.rotation);
+            Debug.LogError("ItemGenerator not configured!");
+            return;
         }
-    }
 
-    /// <summary>
-    /// Spawn the first set of boxes with unique required items
-    /// </summary>
-    void SpawnInitialBoxes()
-    {
-        if (boxPrefab == null || boxSpawnPoints.Count == 0 || possibleItems.Length == 0) return;
+        // Create shuffled copy of items to ensure uniqueness
+        List<ItemType> shuffledItems = new List<ItemType>(possibleItems);
+        Shuffle(shuffledItems);
 
-        // Shuffle possible items so each box gets a different one
-        ItemType[] shuffledItems = (ItemType[])possibleItems.Clone();
-        ShuffleArray(shuffledItems);
+        int boxCount = Mathf.Min(5, boxSpawnPoints.Length, shuffledItems.Count);
 
-        for (int i = 0; i < startBoxCount; i++)
+        for (int i = 0; i < boxCount; i++)
         {
-            Transform spawnPoint = boxSpawnPoints[i % boxSpawnPoints.Count];
-            GameObject boxObj = Instantiate(boxPrefab, spawnPoint.position, spawnPoint.rotation);
+            GameObject boxObj = Instantiate(boxPrefab, boxSpawnPoints[i].position, Quaternion.identity);
 
             BoxScript box = boxObj.GetComponent<BoxScript>();
             if (box != null)
             {
-                // Assign unique required item
-                box.SetRequiredItem(shuffledItems[i % shuffledItems.Length]);
+                box.SetRequiredItem(shuffledItems[i]);
             }
         }
     }
 
-    /// <summary>
-    /// Spawn a replacement box after one is packed
-    /// </summary>
-    public void SpawnReplacementBox()
+    // Fisher-Yates shuffle
+    void Shuffle(List<ItemType> list)
     {
-        if (boxPrefab == null || boxSpawnPoints.Count == 0 || possibleItems.Length == 0) return;
-
-        Transform point = boxSpawnPoints[Random.Range(0, boxSpawnPoints.Count)];
-        GameObject boxObj = Instantiate(boxPrefab, point.position, point.rotation);
-
-        BoxScript box = boxObj.GetComponent<BoxScript>();
-        if (box != null)
+        for (int i = 0; i < list.Count; i++)
         {
-            box.SetRequiredItem(possibleItems[Random.Range(0, possibleItems.Length)]);
-        }
-    }
-
-    /// <summary>
-    /// Shuffle array helper
-    /// </summary>
-    void ShuffleArray(ItemType[] array)
-    {
-        for (int i = array.Length - 1; i > 0; i--)
-        {
-            int j = Random.Range(0, i + 1);
-            ItemType temp = array[i];
-            array[i] = array[j];
-            array[j] = temp;
+            int rand = Random.Range(i, list.Count);
+            (list[i], list[rand]) = (list[rand], list[i]);
         }
     }
 }
