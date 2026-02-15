@@ -10,58 +10,35 @@ public class ItemSpawnData
 
 public class ItemGenerator : MonoBehaviour
 {
-    [Header("5 Boxes placed in the scene")]
-    public BoxScript[] boxes = new BoxScript[5];
+    [Header("Boxes already in scene")]
+    public BoxScript[] boxes;
 
-    [Header("Items that can be required")]
+    [Header("Possible required items (>= box count)")]
     public ItemType[] possibleItems;
 
-    [Header("Items to spawn in the scene")]
+    [Header("Collectible items to spawn")]
     public List<ItemSpawnData> itemsToSpawn = new List<ItemSpawnData>();
 
-    private void Start()
+    void Start()
     {
         AssignItemsToBoxes();
-        SpawnAllItems();   // ⭐ NEW
+        SpawnAllItems();
     }
 
     // ─────────────────────────────
-    // Spawn all items once at start
-    // ─────────────────────────────
-    void SpawnAllItems()
-    {
-        if (itemsToSpawn == null || itemsToSpawn.Count == 0)
-        {
-            Debug.LogWarning("ItemGenerator: No items to spawn.");
-            return;
-        }
-
-        foreach (ItemSpawnData data in itemsToSpawn)
-        {
-            if (data.itemPrefab == null || data.spawnPoint == null)
-            {
-                Debug.LogWarning("ItemGenerator: Missing prefab or spawn point.");
-                continue;
-            }
-
-            Instantiate(data.itemPrefab, data.spawnPoint.position, data.spawnPoint.rotation);
-        }
-    }
-
-    // ─────────────────────────────
-    // Assign UNIQUE items to 5 boxes
+    // Assign UNIQUE items + spawn correct text
     // ─────────────────────────────
     void AssignItemsToBoxes()
     {
-        if (boxes == null || boxes.Length == 0)
+        if (boxes.Length == 0)
         {
-            Debug.LogError("ItemGenerator: No boxes assigned!");
+            Debug.LogError("ItemGenerator: No boxes assigned.");
             return;
         }
 
-        if (possibleItems == null || possibleItems.Length < boxes.Length)
+        if (possibleItems.Length < boxes.Length)
         {
-            Debug.LogError("ItemGenerator: Not enough possible items for unique assignment!");
+            Debug.LogError("ItemGenerator: Not enough possible items.");
             return;
         }
 
@@ -74,11 +51,23 @@ public class ItemGenerator : MonoBehaviour
             (shuffled[i], shuffled[rand]) = (shuffled[rand], shuffled[i]);
         }
 
-        // Assign first 5 unique items
+        // Initialize each box with its item
         for (int i = 0; i < boxes.Length; i++)
         {
-            if (boxes[i] != null)
-                boxes[i].SetRequiredItem(shuffled[i]);
+            boxes[i].Initialize(shuffled[i]);
+        }
+    }
+
+    // ─────────────────────────────
+    // Spawn collectible items
+    // ─────────────────────────────
+    void SpawnAllItems()
+    {
+        foreach (var data in itemsToSpawn)
+        {
+            if (data.itemPrefab == null || data.spawnPoint == null) continue;
+
+            Instantiate(data.itemPrefab, data.spawnPoint.position, data.spawnPoint.rotation);
         }
     }
 }

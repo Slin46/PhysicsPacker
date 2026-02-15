@@ -221,7 +221,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6673322032668118015}
-  - component: {fileID: 4021743259413534722}
+  - component: {fileID: 2541398617777975845}
   - component: {fileID: 914737910148630610}
   m_Layer: 7
   m_Name: radius
@@ -245,7 +245,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 5702161443172912353}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4021743259413534722
+--- !u!114 &2541398617777975845
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -305,15 +305,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 243c12ec720c64fdbb1c7e9c2aee581a, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: -11.21
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 243c12ec720c64fdbb1c7e9c2aee581a, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.055
+      value: 0.98135
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 243c12ec720c64fdbb1c7e9c2aee581a, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.594
+      value: 7.19
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 243c12ec720c64fdbb1c7e9c2aee581a, type: 3}
       propertyPath: m_LocalRotation.w
@@ -498,7 +498,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3

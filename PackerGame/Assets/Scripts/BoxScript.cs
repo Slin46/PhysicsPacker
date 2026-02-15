@@ -1,10 +1,10 @@
-using System.Collections;
 using TMPro;
 using UnityEngine;
+using System.Collections;
 
 public class BoxScript : MonoBehaviour
 {
-    [Header("Required Item")]
+    [Header("Assigned at runtime")]
     public ItemType requiredItem;
 
     [Header("Pack Point")]
@@ -15,19 +15,38 @@ public class BoxScript : MonoBehaviour
     private TextMeshPro worldTextInstance;
     public Vector3 textOffset = new Vector3(0, 2f, 0);
 
-   public bool isPacked = false;
+    public bool isPacked = false;
     private RoundManager roundManager;
 
-    void Start()
+    void Awake()
     {
         roundManager = FindFirstObjectByType<RoundManager>();
+    }
 
-        // Spawn floating text
-        if (worldTextPrefab != null)
-        {
-            worldTextInstance = Instantiate(worldTextPrefab, transform.position + textOffset, Quaternion.identity);
+    // 🔹 Called ONLY by ItemGenerator
+    public void Initialize(ItemType item)
+    {
+        requiredItem = item;
+
+        SpawnFloatingText();
+        UpdateFloatingText();
+    }
+
+    void SpawnFloatingText()
+    {
+        if (worldTextPrefab == null) return;
+
+        worldTextInstance = Instantiate(
+            worldTextPrefab,
+            transform.position + textOffset,
+            Quaternion.identity
+        );
+    }
+
+    void UpdateFloatingText()
+    {
+        if (worldTextInstance != null)
             worldTextInstance.text = requiredItem.ToString();
-        }
     }
 
     void LateUpdate()
@@ -44,11 +63,7 @@ public class BoxScript : MonoBehaviour
         Item item = other.GetComponent<Item>();
         if (item == null) return;
 
-        if (item.itemType != requiredItem)
-        {
-            Debug.Log("Wrong box!");
-            return;
-        }
+        if (item.itemType != requiredItem) return;
 
         StartCoroutine(PackItem(other.gameObject));
     }
@@ -80,14 +95,5 @@ public class BoxScript : MonoBehaviour
 
         if (roundManager != null)
             roundManager.OnBoxCompleted(this);
-    }
-
-    // Called by ItemGenerator when spawning
-    public void SetRequiredItem(ItemType item)
-    {
-        requiredItem = item;
-
-        if (worldTextInstance != null)
-            worldTextInstance.text = requiredItem.ToString();
     }
 }
