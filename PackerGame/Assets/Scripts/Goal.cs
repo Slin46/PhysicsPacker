@@ -44,7 +44,7 @@ public class Goal : MonoBehaviour
     }
 
     // 🔹 Then destroy the box
-    Destroy(box.gameObject);
+    Destroy(box.transform.root.gameObject);
 
     if (completedBoxes >= totalBoxes && roundManager != null)
     {
