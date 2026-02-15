@@ -19,24 +19,38 @@ public class Goal : MonoBehaviour
 {
     Debug.Log("GOAL HIT BY: " + other.name);
 
-    Rigidbody rb = other.attachedRigidbody;
-    if (rb == null) return;
+    BoxScript box = other.GetComponentInParent<BoxScript>();
+    if (box == null)
+    {
+        Debug.Log("No BoxScript found in parent.");
+        return;
+    }
 
-    BoxScript box = rb.GetComponent<BoxScript>();
-    if (box == null) return;
-    if (!box.isPacked) return;
+    if (!box.isPacked)
+    {
+        Debug.Log("Box not packed yet.");
+        return;
+    }
 
     completedBoxes++;
     UpdateUI();
 
-    Debug.Log("DESTROYING: " + rb.gameObject.name);
+    Debug.Log("DESTROYING BOX + ITEM: " + box.gameObject.name);
 
-    Destroy(rb.gameObject);
+    // 🔹 Destroy packed item FIRST (child of boxInteriorPoint)
+    if (box.boxInteriorPoint != null && box.boxInteriorPoint.childCount > 0)
+    {
+        Destroy(box.boxInteriorPoint.GetChild(0).gameObject);
+    }
+
+    // 🔹 Then destroy the box
+    Destroy(box.gameObject);
 
     if (completedBoxes >= totalBoxes && roundManager != null)
+    {
         roundManager.WinRound();
+    }
 }
-
 
     private void UpdateUI()
     {
