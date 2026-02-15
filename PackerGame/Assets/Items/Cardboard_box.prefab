@@ -257,12 +257,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 28be31e107a8242f2b6964d8945eda8f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BoxScript
+  requiredItem: 1
   boxInteriorPoint: {fileID: 9032517999211076359}
-  isPacked: 0
-  maxSpeed: 3
-  requiredItem: 0
   worldTextPrefab: {fileID: 8990110856778812875}
   textOffset: {x: 0, y: 2, z: 0}
+  isPacked: 0
 --- !u!65 &914737910148630610
 BoxCollider:
   m_ObjectHideFlags: 0
