@@ -1,60 +1,46 @@
 using TMPro;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public class Goal : MonoBehaviour
 {
-    //amount of boxes and how much r completed
     public int totalBoxes = 5;
     private int completedBoxes = 0;
 
-    //text UI to show how much boxes r completed
     public TextMeshProUGUI progressText;
 
     private RoundManager roundManager;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         roundManager = FindFirstObjectByType<RoundManager>();
         UpdateUI();
     }
-
     private void OnTriggerEnter(Collider other)
-    {
-        //grab the boxscript
-        BoxScript box = other.GetComponent<BoxScript>();
-        if (box == null) return;
+{
+    Debug.Log("GOAL HIT BY: " + other.name);
 
-        // Only accept packed boxes
-        if (!box.isPacked) return;
-        //avoid double counting
-        box.enabled = false;
+    Rigidbody rb = other.attachedRigidbody;
+    if (rb == null) return;
 
-        completedBoxes++;
-        UpdateUI();
+    BoxScript box = rb.GetComponent<BoxScript>();
+    if (box == null) return;
+    if (!box.isPacked) return;
 
-        Destroy(other.gameObject);
+    completedBoxes++;
+    UpdateUI();
 
-        if (completedBoxes >= totalBoxes)
-        {
-            //call round manage
-            if (roundManager != null)
-            {
-                RoundManager.Instance.WinRound();
-            }
-            Debug.Log("All boxes completed!");
-        }
-    }
+    Debug.Log("DESTROYING: " + rb.gameObject.name);
+
+    Destroy(rb.gameObject);
+
+    if (completedBoxes >= totalBoxes && roundManager != null)
+        roundManager.WinRound();
+}
+
+
     private void UpdateUI()
     {
         if (progressText != null)
-            progressText.text = "Completed: "+ completedBoxes + "/" + totalBoxes;
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+            progressText.text = "Completed: " + completedBoxes + "/" + totalBoxes;
     }
 }
