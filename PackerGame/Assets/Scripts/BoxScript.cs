@@ -72,28 +72,54 @@ public class BoxScript : MonoBehaviour
     {
         isPacked = true;
 
+        // hide floating text
         if (worldTextInstance != null)
             worldTextInstance.gameObject.SetActive(false);
 
+        // ─────────────────────────
+        // 1. Force player release
+        // ─────────────────────────
+        GrabScript grabber = FindFirstObjectByType<GrabScript>();
+        if (grabber != null)
+            grabber.ForceRelease();
+
+        yield return null; // wait 1 frame so physics settles
+
+        // ─────────────────────────
+        // 2. Disable physics safely
+        // ─────────────────────────
         Rigidbody rb = itemObj.GetComponent<Rigidbody>();
         Collider col = itemObj.GetComponent<Collider>();
 
         if (rb != null)
         {
             rb.linearVelocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
             rb.isKinematic = true;
+            rb.detectCollisions = false;
         }
 
         if (col != null)
             col.enabled = false;
 
-        yield return new WaitForFixedUpdate();
+        // ─────────────────────────
+        // 3. Parent inside box
+        // ─────────────────────────
+        itemObj.transform.SetParent(boxInteriorPoint);
+        itemObj.transform.localPosition = Vector3.zero;
+        itemObj.transform.localRotation = Quaternion.identity;
 
-        itemObj.transform.SetParent(transform);
-        itemObj.transform.position = boxInteriorPoint.position;
-        itemObj.transform.rotation = boxInteriorPoint.rotation;
-
+        // ─────────────────────────
+        // 4. Notify round manager
+        // ─────────────────────────
         if (roundManager != null)
             roundManager.OnBoxCompleted(this);
+        // enable box grabbing after packing
+        Rigidbody boxRb = GetComponent<Rigidbody>();
+        if (boxRb != null)
+        {
+            boxRb.isKinematic = false;
+        }
     }
+
 }

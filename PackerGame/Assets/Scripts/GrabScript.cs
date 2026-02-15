@@ -95,4 +95,14 @@ public class GrabScript : MonoBehaviour
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(transform.position, grabRadius);
     }
+    public void ForceRelease()
+    {
+        if (joint != null)
+        {
+            Destroy(joint);
+            joint = null;
+        }
+
+        grabbedRb = null;
+    }
 }
