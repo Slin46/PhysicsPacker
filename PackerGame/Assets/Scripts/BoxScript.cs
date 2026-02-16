@@ -89,7 +89,7 @@ public class BoxScript : MonoBehaviour
         if (grabber != null)
             grabber.ForceRelease();
 
-        yield return null; // wait 1 frame so physics settles
+        yield return new WaitForFixedUpdate(); // wait 1 frame so physics settles
 
         // Disable physics safely
         Rigidbody rb = itemObj.GetComponent<Rigidbody>();
@@ -122,7 +122,7 @@ public class BoxScript : MonoBehaviour
         Rigidbody boxRb = GetComponent<Rigidbody>();
         if (boxRb != null)
         {
-            boxRb.isKinematic = false;
+            //boxRb.isKinematic = false;
         }
 
         // 🔹 Put box on grabbable layer
