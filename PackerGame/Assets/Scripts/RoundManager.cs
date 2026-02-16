@@ -16,7 +16,6 @@ public class RoundManager : MonoBehaviour
 
     private float timer;
     private bool roundActive = true;
-    private int boxesCompleted = 0;
 
     [Header("UI")]
     public TextMeshProUGUI timerText;
