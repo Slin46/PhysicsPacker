@@ -3,6 +3,9 @@ using UnityEngine.SceneManagement;
 
 public class MenuButtons : MonoBehaviour
 {
+    void Start()
+    {
+    }
     public static class SceneHistory
     {
         //save the current scene name its on

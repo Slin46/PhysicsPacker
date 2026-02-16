@@ -101,6 +101,7 @@ public class RoundManager : MonoBehaviour
     /// </summary>
     private void EndRound(string message, string result)
     {
+        mainBgm.Stop();
         roundActive = false;
         winOrLose = result;
 
