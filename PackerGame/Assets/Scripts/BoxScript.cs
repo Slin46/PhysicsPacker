@@ -120,6 +120,9 @@ public class BoxScript : MonoBehaviour
         {
             boxRb.isKinematic = false;
         }
+
+        // 🔹 Put box on grabbable layer
+        gameObject.layer = LayerMask.NameToLayer("Grabbable");
     }
 
 }
