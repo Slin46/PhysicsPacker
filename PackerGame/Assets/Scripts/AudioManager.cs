@@ -11,13 +11,15 @@ public class AudioManager : MonoBehaviour
     [Header("Gameplay scene name")]
     public string gameplaySceneName = "Scene1";
 
+    private bool hasPlayedMenuMusic = false; // ← NEW
+
     void Awake()
     {
         // Singleton
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject); // 🔹 stay across scenes
+            DontDestroyOnLoad(gameObject);
         }
         else
         {
@@ -28,7 +30,7 @@ public class AudioManager : MonoBehaviour
 
     void Start()
     {
-        PlayMenuBGM();
+        PlayMenuBGMOnce();
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
@@ -37,11 +39,15 @@ public class AudioManager : MonoBehaviour
         SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
-    // 🎵 Play menu music
-    public void PlayMenuBGM()
+    // 🎵 Play only ONE time ever
+    void PlayMenuBGMOnce()
     {
-        if (menuBgm != null && !menuBgm.isPlaying)
+        if (menuBgm != null && !hasPlayedMenuMusic)
+        {
+            menuBgm.loop = false; // extra safety
             menuBgm.Play();
+            hasPlayedMenuMusic = true;
+        }
     }
 
     // ⛔ Stop when gameplay scene loads
@@ -49,12 +55,9 @@ public class AudioManager : MonoBehaviour
     {
         if (scene.name == gameplaySceneName)
         {
-            if (menuBgm != null)
+            if (menuBgm != null && menuBgm.isPlaying)
                 menuBgm.Stop();
         }
-        else
-        {
-            PlayMenuBGM();
-        }
+        // ❌ DO NOT replay music in other scenes
     }
 }
