@@ -52,7 +52,7 @@ public class GrabScript : MonoBehaviour
             }
         }
 
-        grabbedRb = closest.GetComponent<Rigidbody>();
+        grabbedRb = closest.GetComponentInParent<Rigidbody>();
         if (grabbedRb == null) return;
 
         //connects object to joint

@@ -31,7 +31,6 @@ public class BoxScript : MonoBehaviour
         SpawnFloatingText();
         UpdateFloatingText();
     }
-
     void SpawnFloatingText()
     {
         if (worldTextPrefab == null) return;
@@ -39,21 +38,30 @@ public class BoxScript : MonoBehaviour
         worldTextInstance = Instantiate(
             worldTextPrefab,
             transform.position + textOffset,
-            Quaternion.identity
+            Quaternion.Euler(90f, 0f, 0f) // ← face upward
         );
+
+        // Optional: parent to box so it follows automatically
+        worldTextInstance.transform.SetParent(transform);
     }
+
 
     void UpdateFloatingText()
     {
         if (worldTextInstance != null)
             worldTextInstance.text = requiredItem.ToString();
     }
-
     void LateUpdate()
     {
         if (worldTextInstance != null)
+        {
             worldTextInstance.transform.position = transform.position + textOffset;
+
+            // keep text facing upward
+            worldTextInstance.transform.rotation = Quaternion.Euler(90f, 0f, 0f);
+        }
     }
+
 
     private void OnTriggerEnter(Collider other)
     {
@@ -76,18 +84,14 @@ public class BoxScript : MonoBehaviour
         if (worldTextInstance != null)
             worldTextInstance.gameObject.SetActive(false);
 
-        // ─────────────────────────
-        // 1. Force player release
-        // ─────────────────────────
+        // Force player release
         GrabScript grabber = FindFirstObjectByType<GrabScript>();
         if (grabber != null)
             grabber.ForceRelease();
 
         yield return null; // wait 1 frame so physics settles
 
-        // ─────────────────────────
-        // 2. Disable physics safely
-        // ─────────────────────────
+        // Disable physics safely
         Rigidbody rb = itemObj.GetComponent<Rigidbody>();
         Collider col = itemObj.GetComponent<Collider>();
 
@@ -120,6 +124,9 @@ public class BoxScript : MonoBehaviour
         {
             boxRb.isKinematic = false;
         }
+
+        // 🔹 Put box on grabbable layer
+        gameObject.layer = LayerMask.NameToLayer("Grabbable");
     }
 
 }

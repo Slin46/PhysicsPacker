@@ -101,7 +101,6 @@ public class RoundManager : MonoBehaviour
     /// </summary>
     private void EndRound(string message, string result)
     {
-        mainBgm.Stop();
         roundActive = false;
         winOrLose = result;
 
@@ -122,6 +121,7 @@ public class RoundManager : MonoBehaviour
         yield return new WaitForSecondsRealtime(1f);
 
         Time.timeScale = 1f;
+        mainBgm.Stop();
         PlayerPrefs.SetString("RESULT", winOrLose);
 
         SceneManager.LoadScene(resultSceneName);

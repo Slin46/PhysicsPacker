@@ -180,7 +180,7 @@ AudioSource:
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 8300000, guid: 13a1dc0ab366c4352b1a69a818111002, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 0.748
+  m_Volume: 0.086
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -665,7 +665,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 125436396}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: interiorPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -696,7 +696,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 129560860}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: interiorPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -875,8 +875,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 55
-  m_fontSizeBase: 55
+  m_fontSize: 70
+  m_fontSizeBase: 70
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -989,7 +989,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 20, y: 5}
+  m_SizeDelta: {x: 30, y: 10}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &196569213
 GameObject:
@@ -1790,7 +1790,7 @@ GameObject:
   - component: {fileID: 391779241}
   - component: {fileID: 391779243}
   - component: {fileID: 391779242}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: TriggerRadius
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2125,7 +2125,7 @@ GameObject:
   - component: {fileID: 422563031}
   - component: {fileID: 422563033}
   - component: {fileID: 422563032}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: TriggerRadius
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2518,6 +2518,10 @@ PrefabInstance:
       value: Cardboard_box
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 243c12ec720c64fdbb1c7e9c2aee581a, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 243c12ec720c64fdbb1c7e9c2aee581a, type: 3}
       propertyPath: m_TagString
       value: Grabbable
       objectReference: {fileID: 0}
@@ -2525,6 +2529,10 @@ PrefabInstance:
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 2351b816081ea403686c736ea1537442, type: 2}
+    - target: {fileID: 2785048739272084784, guid: 243c12ec720c64fdbb1c7e9c2aee581a, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -3492,6 +3500,10 @@ PrefabInstance:
       value: Cardboard_box (2)
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 243c12ec720c64fdbb1c7e9c2aee581a, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 243c12ec720c64fdbb1c7e9c2aee581a, type: 3}
       propertyPath: m_TagString
       value: Grabbable
       objectReference: {fileID: 0}
@@ -3499,6 +3511,10 @@ PrefabInstance:
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 2351b816081ea403686c736ea1537442, type: 2}
+    - target: {fileID: 2785048739272084784, guid: 243c12ec720c64fdbb1c7e9c2aee581a, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -3702,7 +3718,7 @@ GameObject:
   - component: {fileID: 615802413}
   - component: {fileID: 615802415}
   - component: {fileID: 615802414}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: TriggerRadius
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4548,7 +4564,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 825257310}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: interiorPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4579,7 +4595,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 832143950}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: interiorPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4789,8 +4805,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 55
-  m_fontSizeBase: 55
+  m_fontSize: 70
+  m_fontSizeBase: 70
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -4903,7 +4919,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 20, y: 5}
+  m_SizeDelta: {x: 30, y: 10}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1074379043
 GameObject:
@@ -5266,6 +5282,10 @@ PrefabInstance:
       value: Cardboard_box (1)
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 243c12ec720c64fdbb1c7e9c2aee581a, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 243c12ec720c64fdbb1c7e9c2aee581a, type: 3}
       propertyPath: m_TagString
       value: Grabbable
       objectReference: {fileID: 0}
@@ -5273,6 +5293,10 @@ PrefabInstance:
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 2351b816081ea403686c736ea1537442, type: 2}
+    - target: {fileID: 2785048739272084784, guid: 243c12ec720c64fdbb1c7e9c2aee581a, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -5883,8 +5907,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 55
-  m_fontSizeBase: 55
+  m_fontSize: 70
+  m_fontSizeBase: 70
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -5997,7 +6021,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 20, y: 5}
+  m_SizeDelta: {x: 30, y: 10}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1001 &1408874052
 PrefabInstance:
@@ -6068,6 +6092,10 @@ PrefabInstance:
       value: Cardboard_box (3)
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 243c12ec720c64fdbb1c7e9c2aee581a, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 243c12ec720c64fdbb1c7e9c2aee581a, type: 3}
       propertyPath: m_TagString
       value: Grabbable
       objectReference: {fileID: 0}
@@ -6075,6 +6103,10 @@ PrefabInstance:
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 2351b816081ea403686c736ea1537442, type: 2}
+    - target: {fileID: 2785048739272084784, guid: 243c12ec720c64fdbb1c7e9c2aee581a, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -6859,7 +6891,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1537243841}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: interiorPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7022,7 +7054,7 @@ GameObject:
   - component: {fileID: 1604497175}
   - component: {fileID: 1604497177}
   - component: {fileID: 1604497176}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: TriggerRadius
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7570,6 +7602,10 @@ PrefabInstance:
       value: Cardboard_box (4)
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 243c12ec720c64fdbb1c7e9c2aee581a, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 243c12ec720c64fdbb1c7e9c2aee581a, type: 3}
       propertyPath: m_TagString
       value: Grabbable
       objectReference: {fileID: 0}
@@ -7577,6 +7613,10 @@ PrefabInstance:
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 2351b816081ea403686c736ea1537442, type: 2}
+    - target: {fileID: 2785048739272084784, guid: 243c12ec720c64fdbb1c7e9c2aee581a, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -7720,8 +7760,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 55
-  m_fontSizeBase: 55
+  m_fontSize: 70
+  m_fontSizeBase: 70
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -7824,17 +7864,17 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1797309185}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 503571428}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 20, y: 5}
+  m_SizeDelta: {x: 30, y: 10}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1835558100
 GameObject:
@@ -7847,7 +7887,7 @@ GameObject:
   - component: {fileID: 1835558101}
   - component: {fileID: 1835558103}
   - component: {fileID: 1835558102}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: TriggerRadius
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8251,8 +8291,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 55
-  m_fontSizeBase: 55
+  m_fontSize: 70
+  m_fontSizeBase: 70
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -8365,7 +8405,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 20, y: 5}
+  m_SizeDelta: {x: 30, y: 10}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &2053144386
 GameObject:
