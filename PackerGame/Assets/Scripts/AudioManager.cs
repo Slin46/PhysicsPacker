@@ -9,29 +9,30 @@ public class AudioManager : MonoBehaviour
     public AudioSource menuBgm;
 
     [Header("Gameplay scene name")]
-    public string gameplaySceneName = "Scene1";
-
-    private bool hasPlayedMenuMusic = false; // ← NEW
+    //gameplay scene
+    public string gameplaySceneName = "Scene1"; 
 
     void Awake()
     {
-        // Singleton
+        // Singleton pattern
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject);
+            DontDestroyOnLoad(gameObject); // persist across scenes
         }
         else
         {
-            Destroy(gameObject);
+            Destroy(gameObject); // destroy duplicates
             return;
         }
     }
 
     void Start()
     {
-        PlayMenuBGMOnce();
         SceneManager.sceneLoaded += OnSceneLoaded;
+
+        // If the first scene is a menu scene, start music
+        PlayMenuMusicIfMenuScene(SceneManager.GetActiveScene().name);
     }
 
     void OnDestroy()
@@ -39,25 +40,33 @@ public class AudioManager : MonoBehaviour
         SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
-    // 🎵 Play only ONE time ever
-    void PlayMenuBGMOnce()
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        if (menuBgm != null && !hasPlayedMenuMusic)
+        // Stop menu music in gameplay
+        if (scene.name == gameplaySceneName)
         {
-            menuBgm.loop = false; // extra safety
-            menuBgm.Play();
-            hasPlayedMenuMusic = true;
+            StopMenuMusic();
+        }
+        else
+        {
+            // Start menu music in start/result/home scenes
+            PlayMenuMusicIfMenuScene(scene.name);
         }
     }
 
-    // ⛔ Stop when gameplay scene loads
-    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    private void PlayMenuMusicIfMenuScene(string sceneName)
     {
-        if (scene.name == gameplaySceneName)
+        // Only play if not already playing
+        if (menuBgm != null && !menuBgm.isPlaying && sceneName != gameplaySceneName)
         {
-            if (menuBgm != null && menuBgm.isPlaying)
-                menuBgm.Stop();
+            menuBgm.loop = true;
+            menuBgm.Play();
         }
-        // ❌ DO NOT replay music in other scenes
+    }
+
+    private void StopMenuMusic()
+    {
+        if (menuBgm != null && menuBgm.isPlaying)
+            menuBgm.Stop();
     }
 }

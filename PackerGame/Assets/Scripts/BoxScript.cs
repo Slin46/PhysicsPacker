@@ -122,7 +122,7 @@ public class BoxScript : MonoBehaviour
         Rigidbody boxRb = GetComponent<Rigidbody>();
         if (boxRb != null)
         {
-            //boxRb.isKinematic = false;
+            boxRb.isKinematic = false;
         }
 
         // 🔹 Put box on grabbable layer
