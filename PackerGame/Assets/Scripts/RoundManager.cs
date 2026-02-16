@@ -69,36 +69,20 @@ public class RoundManager : MonoBehaviour
             timerText.text = string.Format("Time Left: {0:00}:{1:00}", minutes, seconds);
         }
     }
-
-    /// <summary>
     /// Called by BoxScript when a box is successfully packed
-    /// </summary>
     public void OnBoxCompleted(BoxScript box)
-{
-    if (!roundActive) return;
-
-    boxesCompleted++;
-    Debug.Log($"Box completed! Total: {boxesCompleted}/{boxesToWin}");
-
-    // ❌ No more replacement spawning
-
-    if (boxesCompleted >= boxesToWin)
     {
-        WinRound();
-    }
-}
+        if (!roundActive) return;
 
-    /// <summary>
+        Debug.Log("Box packed (not delivered yet).");
+    }
     /// Called when player completes all boxes
-    /// </summary>
     public void WinRound()
     {
         EndRound("You win!", "WIN");
     }
 
-    /// <summary>
     /// Ends the round and shows result
-    /// </summary>
     private void EndRound(string message, string result)
     {
         roundActive = false;
