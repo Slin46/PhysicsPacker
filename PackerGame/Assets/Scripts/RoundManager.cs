@@ -10,6 +10,9 @@ public class RoundManager : MonoBehaviour
     [Header("Game Settings")]
     public int boxesToWin = 5;              // Number of boxes to pack to win
     public float roundTime = 120f;          // Round duration in seconds
+    [Header("Audio")]
+    public AudioSource mainBgm;
+    public AudioClip bgmClip;
 
     private float timer;
     private bool roundActive = true;
@@ -35,6 +38,12 @@ public class RoundManager : MonoBehaviour
 
         if (timesUpText != null)
             timesUpText.gameObject.SetActive(false);
+        if (mainBgm != null && bgmClip != null)
+        {
+            mainBgm.clip = bgmClip;
+            mainBgm.loop = true;
+            mainBgm.Play();
+        }
     }
 
     private void Update()
