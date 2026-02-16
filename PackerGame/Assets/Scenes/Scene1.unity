@@ -180,13 +180,8 @@ AudioSource:
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 8300000, guid: 13a1dc0ab366c4352b1a69a818111002, type: 3}
   m_PlayOnAwake: 1
-<<<<<<< HEAD
   m_Volume: 1
   m_Pitch: 1.05
-=======
-  m_Volume: 0.086
-  m_Pitch: 1
->>>>>>> bb01c2f480dcbb3b2f6b98e7c31484066d0c09a8
   Loop: 1
   Mute: 0
   Spatialize: 0
@@ -7869,13 +7864,13 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1797309185}
-  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 503571428}
-  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
